@@ -25,10 +25,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblUser" />
+        app:layout_constraintTop_toBottomOf="@+id/txtUser" />
 
     <EditText
-        android:id="@+id/lblUser"
+        android:id="@+id/txtUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -60,7 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pswContraseña" />
+        app:layout_constraintTop_toBottomOf="@+id/pswContraseña"/>
 
     <ImageView
         android:id="@+id/imageView7"
