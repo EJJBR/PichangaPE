@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permiso de Internet para peticiones HTTP -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -25,9 +27,15 @@
             </intent-filter>
         </activity>
 
-        <!-- MainActivity declarada sin intent-filter de launcher -->
+        <!-- MainActivity (opcional, no es la principal) -->
         <activity
             android:name=".MainActivity"
+            android:exported="true">
+        </activity>
+
+        <!-- DashboardActivity (Nueva actividad a la que se dirige tras un login exitoso) -->
+        <activity
+            android:name=".DashboardActivity"
             android:exported="true">
         </activity>
 
