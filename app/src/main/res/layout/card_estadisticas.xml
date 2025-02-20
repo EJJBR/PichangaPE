@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="4dp"
+    card_view:cardBackgroundColor="#FFFFFF"
+    android:layout_margin="8dp">
+
+    <!-- Contenedor con el fondo blanco y borde -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Nombre de la cancha -->
+            <TextView
+                android:id="@+id/tvCanchaNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre de la Cancha"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <!-- Ganancias obtenidas -->
+            <TextView
+                android:id="@+id/tvGanancias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ganancias: $0"
+                android:layout_marginTop="4dp"/>
+
+            <!-- Total de reservas -->
+            <TextView
+                android:id="@+id/tvTotalReservas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Reservas: 0"
+                android:layout_marginTop="4dp"/>
+
+            <!-- Total de reservas pagadas -->
+            <TextView
+                android:id="@+id/tvTotalReservasPagadas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reservas Pagadas: 0"
+                android:layout_marginTop="4dp"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.cardview.widget.CardView>

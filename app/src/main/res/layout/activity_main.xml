@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".database.login"
+    android:background="@color/design_default_color_background"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/pswContraseña"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/black"
+        android:ems="10"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:textColor="#101010"
+        android:textColorHint="#6D0F0E0E"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtUser" />
+
+    <EditText
+        android:id="@+id/txtUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/black"
+        android:ems="10"
+        android:hint="Usuario"
+        android:inputType="text"
+        android:textColor="#101010"
+        android:textColorHint="#6D0F0E0E"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
+    <Button
+        android:id="@+id/btnIngresar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@drawable/btn_color_selector"
+        android:text="Ingresar"
+        android:textColor="#FDFDFD"
+        android:textColorLink="#FDFDFD"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pswContraseña"/>
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="415dp"
+        android:layout_height="380dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/pichangape_login" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
