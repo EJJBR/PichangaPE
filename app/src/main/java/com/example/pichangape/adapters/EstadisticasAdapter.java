@@ -14,17 +14,16 @@ package com.example.pichangape.adapters;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.pichangape.R;
 import com.example.pichangape.models.CanchaEstadistica;
-
+import com.example.pichangape.ReservacionesActivity; // Asegúrate de importar la actividad
 import java.util.List;
 
 public class EstadisticasAdapter extends RecyclerView.Adapter<EstadisticasAdapter.ViewHolder> {
@@ -60,6 +59,18 @@ public class EstadisticasAdapter extends RecyclerView.Adapter<EstadisticasAdapte
         holder.tvGanancias.setText("Ganancias: $" + String.format("%.2f", estadistica.getGanancias()));
         holder.tvTotalReservas.setText("Total Reservas: " + estadistica.getTotalReservas());
         holder.tvTotalReservasPagadas.setText("Reservas Pagadas: " + estadistica.getTotalReservasPagadas());
+
+        // Agregar listener para detectar el toque en la tarjeta
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Crear el Intent para abrir la actividad de reservaciones
+                Intent intent = new Intent(context, ReservacionesActivity.class);
+                // Enviar el id_cancha para filtrar las reservaciones en la nueva actividad
+                intent.putExtra("id_cancha", estadistica.getIdCancha());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

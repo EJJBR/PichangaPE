@@ -31,6 +31,9 @@
         <!-- Actividad de bienvenida -->
         <activity android:name=".BienvenidaActivity" />
 
+        <!-- Actividad de reservaciones -->
+        <activity android:name=".ReservacionesActivity" />
+
     </application>
 
 </manifest>
