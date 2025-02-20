@@ -15,7 +15,7 @@
         android:theme="@style/Theme.PichangaPE"
         tools:targetApi="31" >
         <activity
-            android:name=".login"
+            android:name=".database.login"
             android:exported="true"
             android:screenOrientation="portrait" >
             <intent-filter>
