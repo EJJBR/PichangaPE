@@ -59,7 +59,7 @@ public class ReservacionesActivity extends AppCompatActivity {
 
     private void fetchReservas() {
         // URL de la API que devuelve las reservaciones para la cancha
-        String urlReservas = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/reservaciones.php"; // Reemplaza con la URL real
+        String urlReservas = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/reservaciones.php";
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Cargando reservaciones...");
@@ -75,12 +75,16 @@ public class ReservacionesActivity extends AppCompatActivity {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject reservaObj = jsonArray.getJSONObject(i);
+
+                                // Obtener el id_reserva y demás datos
+                                int idReserva = reservaObj.getInt("id_reserva");
                                 String fechaInicio = reservaObj.getString("fecha_inicio");
                                 String horaInicio = reservaObj.getString("hora_inicio");
                                 String horaFin = reservaObj.getString("hora_fin");
                                 String estadoReserva = reservaObj.getString("estado_reserva");
 
-                                Reserva reserva = new Reserva(fechaInicio, horaInicio, horaFin, estadoReserva);
+                                // Crear objeto Reserva usando el nuevo constructor
+                                Reserva reserva = new Reserva(idReserva, fechaInicio, horaInicio, horaFin, estadoReserva);
                                 listaReservas.add(reserva);
                             }
                             reservasAdapter.notifyDataSetChanged();

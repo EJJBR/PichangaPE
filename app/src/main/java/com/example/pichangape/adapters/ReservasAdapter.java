@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.pichangape.R;
@@ -31,12 +33,24 @@ public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Reserva reserva = listaReservas.get(position);
+        final Reserva reserva = listaReservas.get(position);
         // Asigna los datos de la reserva a los TextViews del layout
         holder.tvFecha.setText("Fecha: " + reserva.getFechaInicio());
         holder.tvHoraInicio.setText("Inicio: " + reserva.getHoraInicio());
         holder.tvHoraFin.setText("Fin: " + reserva.getHoraFin());
         holder.tvEstado.setText("Estado: " + reserva.getEstadoReserva());
+
+        // Listener para detectar el clic en la tarjeta
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Ejemplo: Mostrar un Toast con el id de la reserva
+                Toast.makeText(context, "Reserva ID: " + reserva.getIdReserva(), Toast.LENGTH_SHORT).show();
+
+                // Aquí puedes iniciar una actividad o llamar a la API
+                // pasando reserva.getIdReserva() para obtener los detalles de esa reserva en particular.
+            }
+        });
     }
 
     @Override
