@@ -1,6 +1,7 @@
 package com.example.pichangape.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.pichangape.DetalleReservaActivity;
 import com.example.pichangape.R;
 import com.example.pichangape.models.Reserva;
 import java.util.List;
@@ -44,11 +47,10 @@ public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Ejemplo: Mostrar un Toast con el id de la reserva
-                Toast.makeText(context, "Reserva ID: " + reserva.getIdReserva(), Toast.LENGTH_SHORT).show();
-
-                // Aquí puedes iniciar una actividad o llamar a la API
-                // pasando reserva.getIdReserva() para obtener los detalles de esa reserva en particular.
+                // Inicia la actividad de detalle pasando el id de la reserva
+                Intent intent = new Intent(context, DetalleReservaActivity.class);
+                intent.putExtra("id_reserva", reserva.getIdReserva());
+                context.startActivity(intent);
             }
         });
     }
