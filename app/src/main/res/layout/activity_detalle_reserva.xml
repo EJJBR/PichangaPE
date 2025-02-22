@@ -125,6 +125,19 @@
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+            <!-- Botón "Verificar comprobante" -->
+            <Button
+                android:id="@+id/btnVerificarComprobante"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Verificar comprobante"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/red"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                android:textStyle="bold"
+                android:padding="12dp"/>
         </LinearLayout>
     </ScrollView>
 
@@ -141,3 +154,5 @@
         android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

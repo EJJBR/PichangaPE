@@ -38,6 +38,11 @@
         <activity
             android:name=".DetalleReservaActivity"
             android:screenOrientation="portrait" />
+
+        <!-- Actividad para verificar comprobante -->
+        <activity
+            android:name=".VerificarComprobanteActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -1,8 +1,10 @@
 package com.example.pichangape;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,12 +23,13 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
+// Esta clase actua junto con activity_Detalle_reserva.xml, no recicla cosas
 public class DetalleReservaActivity extends AppCompatActivity {
 
     private int idReserva;
     private TextView tvFecha, tvHoraInicio, tvHoraFin, tvNombre, tvApellido, tvCelular, tvEstado;
     private ProgressBar progressBar;
+    private Button btnVerificarComprobante;  // Nuevo botón
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,7 @@ public class DetalleReservaActivity extends AppCompatActivity {
         tvCelular = findViewById(R.id.tvCelular);
         tvEstado = findViewById(R.id.tvEstado);
         progressBar = findViewById(R.id.progressBar);
+        btnVerificarComprobante = findViewById(R.id.btnVerificarComprobante);
 
         // Recuperar el id_reserva enviado desde el adaptador
         idReserva = getIntent().getIntExtra("id_reserva", -1);
@@ -53,6 +57,17 @@ public class DetalleReservaActivity extends AppCompatActivity {
 
         // Llamar al método para obtener los detalles de la reserva
         fetchDetalleReserva();
+
+        // Configurar el botón para ir a la pantalla de ver comprobante
+        btnVerificarComprobante.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Inicia la actividad para verificar el comprobante y pasa el idReserva
+                Intent intent = new Intent(DetalleReservaActivity.this, VerificarComprobanteActivity.class);
+                intent.putExtra("id_reserva", idReserva);
+                startActivity(intent);
+            }
+        });
     }
 
     private void fetchDetalleReserva() {
