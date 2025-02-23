@@ -9,18 +9,19 @@
     android:padding="16dp">
 
     <!-- PhotoView para permitir zoom y panning -->
+
+    <!-- Contenedor de botones -->
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/ivComprobante"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="236dp"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Contenedor de botones -->
     <LinearLayout
         android:id="@+id/buttonContainer"
         android:layout_width="0dp"
@@ -69,18 +70,6 @@
         </LinearLayout>
 
         <!-- Botón Regresar -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRegresar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Regresar"
-            android:textColor="@android:color/white"
-            android:background="@drawable/button_red_background"
-            app:backgroundTint="@null"
-            app:cornerRadius="16dp"
-            android:padding="12dp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"/>
     </LinearLayout>
 
     <!-- ProgressBar centrado -->
