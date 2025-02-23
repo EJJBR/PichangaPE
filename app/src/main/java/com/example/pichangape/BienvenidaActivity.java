@@ -71,7 +71,7 @@ public class BienvenidaActivity extends AppCompatActivity {
 
     private void fetchEstadisticas() {
         // URL de la API que retorna las estadísticas filtradas por id_cliente
-        String urlEstadisticas = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/estadisticas_Canchas.php";
+        String urlEstadisticas = "https://0fc85979-d67a-4869-aace-ff2b7e7fd9b4-00-csq92nfutubh.worf.replit.dev/estadisticas_Canchas.php";
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Cargando estadísticas...");

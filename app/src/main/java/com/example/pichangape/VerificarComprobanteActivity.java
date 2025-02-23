@@ -1,6 +1,7 @@
 package com.example.pichangape;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -121,8 +122,8 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
      * Obtiene y muestra el comprobante.
      */
     private void fetchComprobante() {
-        // URL de la API para obtener el voucher (reemplaza con la URL real de tu servidor)
-        String urlComprobante = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/obtener_voucher.php";
+        // URL de la API para obtener el voucher
+        String urlComprobante = "https://0fc85979-d67a-4869-aace-ff2b7e7fd9b4-00-csq92nfutubh.worf.replit.dev/obtener_voucher.php";
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -137,7 +138,7 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
                                 Toast.makeText(VerificarComprobanteActivity.this, jsonObject.getString("error"), Toast.LENGTH_LONG).show();
                                 return;
                             }
-                            // Se asume que la API retorna la URL de la imagen en "image_url"
+                            // Se espera que la API retorne la URL de la imagen en "image_url"
                             String imageUrl = jsonObject.getString("image_url");
                             Glide.with(VerificarComprobanteActivity.this)
                                     .load(imageUrl)
@@ -171,13 +172,12 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
 
     /**
      * Envía el nuevo estado a la API para actualizar la reserva.
-     * La API primero consulta el estado actual en la base de datos y, si ya no es "pendiente",
-     * devuelve un mensaje indicando que la reserva ya fue aprobada o rechazada.
+     * Si la actualización es exitosa, se redirige a la pantalla de BienvenidaActivity.
      * @param nuevoEstado "cancelado" o "pagado"
      */
     private void actualizarEstadoReserva(final String nuevoEstado) {
-        // URL de la API para actualizar el estado (reemplaza con la URL real de tu API)
-        String urlActualizarEstado = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/actualizar_estado_reserva.php";
+        // URL de la API para actualizar el estado
+        String urlActualizarEstado = "https://0fc85979-d67a-4869-aace-ff2b7e7fd9b4-00-csq92nfutubh.worf.replit.dev/actualizar_estado_reserva.php";
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -188,14 +188,29 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            // Si la API detecta que el estado ya no es "pendiente", devolverá un error con el mensaje correspondiente.
                             if (jsonObject.has("error")) {
                                 Toast.makeText(VerificarComprobanteActivity.this, jsonObject.getString("error"), Toast.LENGTH_LONG).show();
                             } else if (jsonObject.has("success")) {
                                 Toast.makeText(VerificarComprobanteActivity.this, jsonObject.getString("success"), Toast.LENGTH_LONG).show();
-                                // Deshabilitar los botones para evitar cambios posteriores
+                                // Deshabilitar botones para evitar cambios posteriores
                                 findViewById(R.id.btnRechazar).setEnabled(false);
                                 findViewById(R.id.btnAprobar).setEnabled(false);
+
+                                // Se espera que la respuesta incluya id_cliente, y opcionalmente nombre y apellido
+                                String id_cliente = jsonObject.optString("id_cliente", "");
+                                String nombre = jsonObject.optString("nombre", "");
+                                String apellido = jsonObject.optString("apellido", "");
+                                if (id_cliente.isEmpty()) {
+                                    Toast.makeText(VerificarComprobanteActivity.this, "No se obtuvo id_cliente", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                // Navegar a la pantalla de BienvenidaActivity
+                                Intent intent = new Intent(VerificarComprobanteActivity.this, BienvenidaActivity.class);
+                                intent.putExtra("id_cliente", id_cliente);
+                                intent.putExtra("nombre", nombre);
+                                intent.putExtra("apellido", apellido);
+                                startActivity(intent);
+                                finish(); // Cerrar esta actividad
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -213,7 +228,7 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
         ) {
             @Override
             protected Map<String, String> getParams() {
-                // Se envían los parámetros id_reserva y estado a la API
+                // Enviar los parámetros id_reserva y estado a la API
                 Map<String, String> params = new HashMap<>();
                 params.put("id_reserva", String.valueOf(idReserva));
                 params.put("estado", nuevoEstado);
