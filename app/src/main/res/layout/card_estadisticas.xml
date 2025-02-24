@@ -2,24 +2,31 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="8dp"
-    card_view:cardElevation="4dp"
-    card_view:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#FFFFFF"
     android:layout_margin="8dp">
 
-    <!-- Contenedor con el fondo blanco y borde -->
-    <FrameLayout
+    <!-- Contenedor que organiza el contenido y el logo -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_background">
+        android:padding="16dp">
 
+        <!-- Contenedor de textos, ocupa el espacio a la izquierda -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/llText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivLogo"
+            android:layout_marginEnd="8dp">
 
             <!-- Nombre de la cancha -->
             <TextView
@@ -28,7 +35,9 @@
                 android:layout_height="wrap_content"
                 android:text="Nombre de la Cancha"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:fontFamily="sans-serif-medium"/>
 
             <!-- Ganancias obtenidas -->
             <TextView
@@ -36,7 +45,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ganancias: $0"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="4dp"
+                android:textColor="@android:color/black"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
             <!-- Total de reservas -->
             <TextView
@@ -44,18 +55,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Reservas: 0"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="4dp"
+                android:textColor="@android:color/black"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
-            <!-- Total de reservas pagadas -->
+            <!-- Reservas pagadas -->
             <TextView
                 android:id="@+id/tvTotalReservasPagadas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reservas Pagadas: 0"
-                android:layout_marginTop="4dp"/>
-
+                android:layout_marginTop="4dp"
+                android:textColor="@android:color/black"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"/>
         </LinearLayout>
 
-    </FrameLayout>
+        <!-- Imagen del logo, posicionada a la derecha y centrada verticalmente -->
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/logito1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/llText"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

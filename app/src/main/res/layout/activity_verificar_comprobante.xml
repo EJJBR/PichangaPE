@@ -5,12 +5,20 @@
     android:id="@+id/clRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:padding="16dp">
+    android:background="@color/white">
 
-    <!-- PhotoView para permitir zoom y panning -->
+    <!-- Imagen en la parte superior (ocupa todo el ancho) -->
+    <ImageView
+        android:id="@+id/ivHeader"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/cancha1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Contenedor de botones -->
+    <!-- Imagen del comprobante (manteniendo su posición original) -->
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/ivComprobante"
         android:layout_width="0dp"
@@ -22,6 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Contenedor de botones -->
     <LinearLayout
         android:id="@+id/buttonContainer"
         android:layout_width="0dp"
@@ -38,38 +47,35 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRechazar"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/button_red_background"
+                android:padding="12dp"
                 android:text="Rechazar"
                 android:textColor="@android:color/white"
-                android:background="@drawable/button_red_background"
-                app:backgroundTint="@null"
-                app:cornerRadius="16dp"
-                android:padding="12dp"
                 android:textStyle="bold"
-                android:layout_marginEnd="8dp" />
+                app:backgroundTint="@null"
+                app:cornerRadius="16dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAprobar"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/button_red_background"
+                android:padding="12dp"
                 android:text="Aprobar"
                 android:textColor="@android:color/white"
-                android:background="@drawable/button_red_background"
-                app:backgroundTint="@null"
-                app:cornerRadius="16dp"
-                android:padding="12dp"
                 android:textStyle="bold"
-                android:layout_marginStart="8dp" />
+                app:backgroundTint="@null"
+                app:cornerRadius="16dp" />
         </LinearLayout>
-
-        <!-- Botón Regresar -->
     </LinearLayout>
 
     <!-- ProgressBar centrado -->
