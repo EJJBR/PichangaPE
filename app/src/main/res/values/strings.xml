@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PichangaPE</string>
+    <string-array name="categorias">
+        <item>Futbol (Grass natural)</item>
+        <item>Futbol (Grass sintetico)</item>
+        <item>Futbol (loza)</item>
+        <item>Voley</item>
+        <item>Basquetball</item>
+    </string-array>
+</resources>

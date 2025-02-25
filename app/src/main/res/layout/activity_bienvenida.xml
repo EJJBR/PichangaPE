@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="16dp">
+
+    <!-- Mensaje de bienvenida -->
+    <TextView
+        android:id="@+id/tvBienvenida"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="¡Bienvenido!"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Contenedor con fondo gris claro que agrupa los botones -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardBotones"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#f0f0f0"
+        app:layout_constraintTop_toBottomOf="@id/tvBienvenida"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Layout interno para los botones con menos padding -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <!-- Botón "Mis canchas" sin color de fondo, texto gris oscuro -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMisCanchas"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Mis canchas"
+                android:textColor="#424242"
+                app:cornerRadius="16dp" />
+
+            <!-- Botón "Ingresos" con fondo rojo y texto blanco -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnIngresos"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Ingresos"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="@android:color/holo_red_light"
+                app:cornerRadius="16dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- RecyclerView para las estadísticas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEstadisticas"
+        android:layout_width="365dp"
+        android:layout_height="454dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardBotones"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnRegistrarCancha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@drawable/btn_color_selector"
+        android:text="Registrar Cancha"
+        android:textColor="#FDFDFD"
+        android:textColorLink="#FDFDFD"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvEstadisticas" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
