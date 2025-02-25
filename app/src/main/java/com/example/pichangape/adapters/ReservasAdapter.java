@@ -14,22 +14,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pichangape.DetalleReservaActivity;
 import com.example.pichangape.R;
 import com.example.pichangape.models.Reserva;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHolder> {
 
     private Context context;
-    private List<Reserva> listaReservas;
+    private List<Reserva> listaReservas;      // Lista que se muestra actualmente
+    private List<Reserva> listaReservasFull;  // Copia completa de la lista
 
     public ReservasAdapter(Context context, List<Reserva> listaReservas) {
         this.context = context;
         this.listaReservas = listaReservas;
+        // Inicialmente se guarda una copia de la lista
+        this.listaReservasFull = new ArrayList<>(listaReservas);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Infla el layout de la tarjeta (por ejemplo, card_reserva.xml)
         View view = LayoutInflater.from(context).inflate(R.layout.card_reserva, parent, false);
         return new ViewHolder(view);
     }
@@ -37,17 +41,14 @@ public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Reserva reserva = listaReservas.get(position);
-        // Asigna los datos de la reserva a los TextViews del layout
         holder.tvFecha.setText("Fecha: " + reserva.getFechaInicio());
         holder.tvHoraInicio.setText("Inicio: " + reserva.getHoraInicio());
         holder.tvHoraFin.setText("Fin: " + reserva.getHoraFin());
         holder.tvEstado.setText("Estado: " + reserva.getEstadoReserva());
 
-        // Listener para detectar el clic en la tarjeta
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Inicia la actividad de detalle pasando el id de la reserva
                 Intent intent = new Intent(context, DetalleReservaActivity.class);
                 intent.putExtra("id_reserva", reserva.getIdReserva());
                 context.startActivity(intent);
@@ -62,7 +63,6 @@ public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvFecha, tvHoraInicio, tvHoraFin, tvEstado;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvFecha = itemView.findViewById(R.id.tvFecha);
@@ -70,5 +70,29 @@ public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHo
             tvHoraFin = itemView.findViewById(R.id.tvHoraFin);
             tvEstado = itemView.findViewById(R.id.tvEstado);
         }
+    }
+
+    // Método para actualizar la lista completa de reservas
+    public void updateList(List<Reserva> nuevasReservas) {
+        listaReservas.clear();
+        listaReservas.addAll(nuevasReservas);
+        listaReservasFull.clear();
+        listaReservasFull.addAll(nuevasReservas);
+        notifyDataSetChanged();
+    }
+
+    // Función para filtrar la lista de reservas según el estado seleccionado.
+    public void filterByEstado(String estado) {
+        listaReservas.clear();
+        if (estado.equalsIgnoreCase("Todos")) {
+            listaReservas.addAll(listaReservasFull);
+        } else {
+            for (Reserva reserva : listaReservasFull) {
+                if (reserva.getEstadoReserva().equalsIgnoreCase(estado)) {
+                    listaReservas.add(reserva);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }

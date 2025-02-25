@@ -2,6 +2,11 @@ package com.example.pichangape;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,15 +38,18 @@ public class ReservacionesActivity extends AppCompatActivity {
     private List<Reserva> listaReservas;
     private ReservasAdapter reservasAdapter;
     private String id_cancha;
+    private Spinner spinnerEstado; // Spinner para elegir el estado
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservaciones);
 
+        // Configuración del RecyclerView
         recyclerView = findViewById(R.id.recyclerReservas);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Inicializamos la lista y el adaptador
         listaReservas = new ArrayList<>();
         reservasAdapter = new ReservasAdapter(this, listaReservas);
         recyclerView.setAdapter(reservasAdapter);
@@ -54,11 +62,34 @@ public class ReservacionesActivity extends AppCompatActivity {
             return;
         }
 
+        // Inicializar y configurar el Spinner para filtrar las reservas por estado
+        spinnerEstado = findViewById(R.id.spinnerEstado);
+
+        // Opciones del Spinner (puedes agregar "Todos" para restaurar la lista completa)
+        String[] estados = {"Todos", "Pendiente", "Alquilada", "Cancelado"};
+        ArrayAdapter<String> adapterEstados = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, estados);
+        adapterEstados.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEstado.setAdapter(adapterEstados);
+
+        spinnerEstado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String estadoSeleccionado = parent.getItemAtPosition(position).toString();
+                reservasAdapter.filterByEstado(estadoSeleccionado);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Opcional: No hacer nada
+            }
+        });
+
+        // Llamada para obtener las reservas desde la API
         fetchReservas();
     }
 
     private void fetchReservas() {
-        // URL de la API que devuelve las reservaciones para la cancha
         String urlReservas = "https://0fc85979-d67a-4869-aace-ff2b7e7fd9b4-00-csq92nfutubh.worf.replit.dev/reservaciones.php";
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -70,24 +101,22 @@ public class ReservacionesActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         progressDialog.dismiss();
+                        List<Reserva> reservasCargadas = new ArrayList<>();
                         try {
-                            // Se asume que la respuesta es un arreglo JSON
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject reservaObj = jsonArray.getJSONObject(i);
-
-                                // Obtener el id_reserva y demás datos
                                 int idReserva = reservaObj.getInt("id_reserva");
                                 String fechaInicio = reservaObj.getString("fecha_inicio");
                                 String horaInicio = reservaObj.getString("hora_inicio");
                                 String horaFin = reservaObj.getString("hora_fin");
                                 String estadoReserva = reservaObj.getString("estado_reserva");
 
-                                // Crear objeto Reserva usando el nuevo constructor
                                 Reserva reserva = new Reserva(idReserva, fechaInicio, horaInicio, horaFin, estadoReserva);
-                                listaReservas.add(reserva);
+                                reservasCargadas.add(reserva);
                             }
-                            reservasAdapter.notifyDataSetChanged();
+                            // Actualizamos el adaptador con la lista completa de reservas
+                            reservasAdapter.updateList(reservasCargadas);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(ReservacionesActivity.this, "Error al procesar datos", Toast.LENGTH_LONG).show();
@@ -104,7 +133,6 @@ public class ReservacionesActivity extends AppCompatActivity {
         ) {
             @Override
             protected Map<String, String> getParams() {
-                // Enviar el id_cancha a la API
                 Map<String, String> params = new HashMap<>();
                 params.put("id_cancha", id_cancha);
                 return params;
@@ -114,4 +142,5 @@ public class ReservacionesActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
+
 }
