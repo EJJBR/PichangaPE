@@ -66,16 +66,26 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+    <!-- SearchView para filtrar canchas -->
+    <SearchView
+        android:id="@+id/svFiltro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:queryHint="Buscar cancha..."
+        app:layout_constraintTop_toBottomOf="@id/cardBotones"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
     <!-- RecyclerView para las estadísticas -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvEstadisticas"
-        android:layout_width="365dp"
-        android:layout_height="454dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/svFiltro"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardBotones"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

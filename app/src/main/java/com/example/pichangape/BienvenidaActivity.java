@@ -2,6 +2,7 @@ package com.example.pichangape;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,14 +35,17 @@ public class BienvenidaActivity extends AppCompatActivity {
     private List<CanchaEstadistica> listaEstadisticas;
     private EstadisticasAdapter adapter;
     private String id_cliente;
+    private SearchView svFiltro; // Referencia al SearchView para filtrar
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bienvenida);
 
+        // Referencias a los elementos de la interfaz
         tvBienvenida = findViewById(R.id.tvBienvenida);
         rvEstadisticas = findViewById(R.id.rvEstadisticas);
+        svFiltro = findViewById(R.id.svFiltro);
 
         // Recuperar los extras enviados desde la actividad de login
         String nombre = getIntent().getStringExtra("nombre");
@@ -49,9 +53,9 @@ public class BienvenidaActivity extends AppCompatActivity {
         id_cliente = getIntent().getStringExtra("id_cliente");
 
         // Verificar que se haya recibido id_cliente
-        if(id_cliente == null || id_cliente.isEmpty()){
+        if (id_cliente == null || id_cliente.isEmpty()){
             Toast.makeText(this, "ID de cliente no recibido", Toast.LENGTH_SHORT).show();
-            // Puedes optar por finalizar la actividad o asignar un valor por defecto para pruebas
+            // Puedes finalizar la actividad o asignar un valor por defecto para pruebas
             // finish();
             return;
         }
@@ -64,6 +68,21 @@ public class BienvenidaActivity extends AppCompatActivity {
         listaEstadisticas = new ArrayList<>();
         adapter = new EstadisticasAdapter(this, listaEstadisticas);
         rvEstadisticas.setAdapter(adapter);
+
+        // Configurar el SearchView para filtrar las canchas en tiempo real
+        svFiltro.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false; // No se consume el evento para seguir mostrando resultados
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
 
         // Llamar a la API para obtener las estadísticas de las canchas
         fetchEstadisticas();
@@ -85,6 +104,10 @@ public class BienvenidaActivity extends AppCompatActivity {
                         try {
                             // Se asume que la respuesta es un arreglo JSON
                             JSONArray jsonArray = new JSONArray(response);
+
+                            // Limpiar la lista actual (en caso de recargar datos)
+                            listaEstadisticas.clear();
+
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
                                 String idCancha = obj.getString("id_cancha");
@@ -96,7 +119,11 @@ public class BienvenidaActivity extends AppCompatActivity {
                                 CanchaEstadistica estadistica = new CanchaEstadistica(idCancha, nombreCancha, ganancias, totalReservas, totalReservasPagadas);
                                 listaEstadisticas.add(estadistica);
                             }
-                            adapter.notifyDataSetChanged();
+
+                            // Reinicializamos el adapter para que actualice también su lista completa interna
+                            adapter = new EstadisticasAdapter(BienvenidaActivity.this, listaEstadisticas);
+                            rvEstadisticas.setAdapter(adapter);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(BienvenidaActivity.this, "Error al procesar los datos", Toast.LENGTH_LONG).show();

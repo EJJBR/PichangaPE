@@ -18,18 +18,23 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.pichangape.R;
 import com.example.pichangape.models.CanchaEstadistica;
 import com.example.pichangape.ReservacionesActivity; // Asegúrate de importar la actividad
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class EstadisticasAdapter extends RecyclerView.Adapter<EstadisticasAdapter.ViewHolder> {
+public class EstadisticasAdapter extends RecyclerView.Adapter<EstadisticasAdapter.ViewHolder> implements Filterable {
 
     private Context context; // Contexto de la aplicación
-    private List<CanchaEstadistica> estadisticasList; // Lista de estadísticas de canchas
+    private List<CanchaEstadistica> estadisticasList; // Lista filtrada que se muestra en el RecyclerView
+    private List<CanchaEstadistica> estadisticasListFull; // Lista completa de estadísticas
 
     /**
      * Constructor que recibe el contexto y la lista de estadísticas de canchas
@@ -39,6 +44,8 @@ public class EstadisticasAdapter extends RecyclerView.Adapter<EstadisticasAdapte
     public EstadisticasAdapter(Context context, List<CanchaEstadistica> estadisticasList) {
         this.context = context;
         this.estadisticasList = estadisticasList;
+        // Clonamos la lista original para mantener la copia completa
+        this.estadisticasListFull = new ArrayList<>(estadisticasList);
     }
 
     @NonNull
@@ -60,11 +67,10 @@ public class EstadisticasAdapter extends RecyclerView.Adapter<EstadisticasAdapte
         holder.tvTotalReservas.setText("Total Reservas: " + estadistica.getTotalReservas());
         holder.tvTotalReservasPagadas.setText("Reservas Pagadas: " + estadistica.getTotalReservasPagadas());
 
-        // Agregar listener para detectar el toque en la tarjeta
+        // Listener para detectar el toque en la tarjeta y abrir ReservacionesActivity
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Crear el Intent para abrir la actividad de reservaciones
                 Intent intent = new Intent(context, ReservacionesActivity.class);
                 // Enviar el id_cancha para filtrar las reservaciones en la nueva actividad
                 intent.putExtra("id_cancha", estadistica.getIdCancha());
@@ -75,7 +81,45 @@ public class EstadisticasAdapter extends RecyclerView.Adapter<EstadisticasAdapte
 
     @Override
     public int getItemCount() {
-        return estadisticasList.size(); // Retorna el número total de elementos en la lista
+        return estadisticasList.size(); // Retorna el número total de elementos en la lista filtrada
+    }
+
+    /**
+     * Implementación del filtrado para buscar canchas por nombre.
+     */
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<CanchaEstadistica> filteredList = new ArrayList<>();
+
+                // Si no hay texto en el filtro, se muestra la lista completa
+                if (constraint == null || constraint.length() == 0) {
+                    filteredList.addAll(estadisticasListFull);
+                } else {
+                    String filterPattern = constraint.toString().toLowerCase().trim();
+                    // Se filtra comparando el nombre de la cancha
+                    for (CanchaEstadistica item : estadisticasListFull) {
+                        if (item.getNombre().toLowerCase().contains(filterPattern)) {
+                            filteredList.add(item);
+                        }
+                    }
+                }
+
+                FilterResults results = new FilterResults();
+                results.values = filteredList;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                // Se actualiza la lista que se muestra en el RecyclerView y se notifica el cambio
+                estadisticasList.clear();
+                estadisticasList.addAll((List) results.values);
+                notifyDataSetChanged();
+            }
+        };
     }
 
     /**
