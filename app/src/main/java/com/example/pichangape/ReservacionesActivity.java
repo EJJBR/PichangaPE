@@ -90,7 +90,7 @@ public class ReservacionesActivity extends AppCompatActivity {
     }
 
     private void fetchReservas() {
-        String urlReservas = "https://0fc85979-d67a-4869-aace-ff2b7e7fd9b4-00-csq92nfutubh.worf.replit.dev/reservaciones.php";
+        String urlReservas = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/reservaciones.php";
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Cargando reservaciones...");
