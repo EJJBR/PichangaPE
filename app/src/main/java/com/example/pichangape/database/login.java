@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.pichangape.BienvenidaActivity;
 import com.example.pichangape.R;
 import com.example.pichangape.models.ConexionDuenio;
+import com.example.pichangape.view.Ingreso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,8 +35,8 @@ public class login extends AppCompatActivity {
     String url = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/CLogin.php";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        EdgeToEdge.enable(this);
         txtUsuario = findViewById(R.id.txtUser);
         pswContrasenia = findViewById(R.id.pswContraseña);
 
@@ -95,11 +96,17 @@ public class login extends AppCompatActivity {
                                     );
                                     Toast.makeText(login.this, "Bienvenido " + duenio.getNombre() + " " + duenio.getApellido(), Toast.LENGTH_LONG).show();
 
-                                    // Incluir id_cliente en el Intent
-                                    Intent intent = new Intent(login.this, BienvenidaActivity.class);
+                                    // Incluir id_cliente en el Intent-fragmento de codigo de Tejeada para llamaar a su pantalla de bienvenida
+                                    /*Intent intent = new Intent(login.this, BienvenidaActivity.class);
                                     intent.putExtra("nombre", duenio.getNombre());
                                     intent.putExtra("apellido", duenio.getApellido());
                                     intent.putExtra("id_cliente", duenio.getId_cliente());  // Se envía el id_cliente
+                                    startActivity(intent);*/
+                                    //Fragmetno mio para llamar a mi propia pantalla de ingreso
+                                    Intent intent = new Intent(login.this, Ingreso.class);
+                                    intent.putExtra("nombre", duenio.getNombre());
+                                    intent.putExtra("apellido", duenio.getApellido());
+                                    intent.putExtra("id_cliente", duenio.getId_cliente());
                                     startActivity(intent);
 
                                 } else {
