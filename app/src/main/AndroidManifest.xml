@@ -50,6 +50,9 @@
             android:name=".DetalleReservaActivity"
             android:screenOrientation="portrait" />
 
+        <!-- Actividad de Registrar -->
+        <activity android:name=".RegistrarCanchasActivity" />
+
         <!-- Actividad para verificar comprobante -->
         <activity
             android:name=".VerificarComprobanteActivity"
