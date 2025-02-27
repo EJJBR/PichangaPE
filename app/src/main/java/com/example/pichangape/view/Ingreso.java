@@ -97,7 +97,7 @@ public class Ingreso extends AppCompatActivity {
                                 Cancha cancha = new Cancha(
                                         canchaObj.getString("id_cancha"),
                                         canchaObj.getString("nombre"),
-                                        canchaObj.getString("ubicacion"),
+                                        canchaObj.getString("direccion"),
                                         (float) canchaObj.optDouble("precio_por_hora", 0.0)
                                 );
                                 canchaList.add(cancha);
