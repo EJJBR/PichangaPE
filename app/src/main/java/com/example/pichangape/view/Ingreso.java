@@ -47,7 +47,7 @@ public class Ingreso extends AppCompatActivity {
     private String idCliente;
     private String nombre;
     private String apellido;
-    private String url = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/CMostrarCancha.php";
+    private String url = "https://739c9dc3-0789-44cf-b9b3-0a433b602be3-00-g7yu9uuhed8k.worf.replit.dev/CMostrarCancha.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

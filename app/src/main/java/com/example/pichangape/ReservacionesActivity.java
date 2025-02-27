@@ -106,7 +106,7 @@ public class ReservacionesActivity extends AppCompatActivity {
 
     // Método para obtener las reservas (ya existente)
     private void fetchReservas() {
-        String urlReservas = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/reservaciones.php";
+        String urlReservas = "https://739c9dc3-0789-44cf-b9b3-0a433b602be3-00-g7yu9uuhed8k.worf.replit.dev/reservaciones.php";
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Cargando reservaciones...");
         progressDialog.show();
@@ -159,7 +159,7 @@ public class ReservacionesActivity extends AppCompatActivity {
 
     // Método para descargar los datos de la cancha en PDF utilizando la API
     private void descargarPDF() {
-        String urlAPI = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/reporte.php?id_cancha=" + id_cancha;
+        String urlAPI = "https://739c9dc3-0789-44cf-b9b3-0a433b602be3-00-g7yu9uuhed8k.worf.replit.dev/reporte.php?id_cancha=" + id_cancha;
         StringRequest request = new StringRequest(Request.Method.GET, urlAPI,
                 new Response.Listener<String>() {
                     @Override

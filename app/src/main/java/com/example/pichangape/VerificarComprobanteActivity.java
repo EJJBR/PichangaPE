@@ -123,7 +123,7 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
      */
     private void fetchComprobante() {
         // URL de la API para obtener el voucher
-        String urlComprobante = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/obtener_voucher.php";
+        String urlComprobante = "https://739c9dc3-0789-44cf-b9b3-0a433b602be3-00-g7yu9uuhed8k.worf.replit.dev/obtener_voucher.php";
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -177,7 +177,7 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
      */
     private void actualizarEstadoReserva(final String nuevoEstado) {
         // URL de la API para actualizar el estado
-        String urlActualizarEstado = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/actualizar_estado_reserva.php";
+        String urlActualizarEstado = "https://739c9dc3-0789-44cf-b9b3-0a433b602be3-00-g7yu9uuhed8k.worf.replit.dev/actualizar_estado_reserva.php";
 
         progressBar.setVisibility(View.VISIBLE);
 

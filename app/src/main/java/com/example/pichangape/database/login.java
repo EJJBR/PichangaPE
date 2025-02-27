@@ -32,7 +32,7 @@ import java.util.Map;
 public class login extends AppCompatActivity {
     EditText txtUsuario, pswContrasenia;
     String strUsuario, strContrasenia;
-    String url = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/CLogin.php";
+    String url = "https://739c9dc3-0789-44cf-b9b3-0a433b602be3-00-g7yu9uuhed8k.worf.replit.dev/CLogin.php";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

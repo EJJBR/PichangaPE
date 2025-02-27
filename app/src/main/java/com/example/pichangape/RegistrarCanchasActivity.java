@@ -40,7 +40,7 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
     private String idDueno; // Variable para almacenar el ID del dueño
 
     // URL del script PHP en tu servidor
-    private static final String URL_REGISTRAR_CANCHA = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/agregar.php";
+    private static final String URL_REGISTRAR_CANCHA = "https://739c9dc3-0789-44cf-b9b3-0a433b602be3-00-g7yu9uuhed8k.worf.replit.dev/agregar.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

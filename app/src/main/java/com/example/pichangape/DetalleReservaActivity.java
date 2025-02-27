@@ -72,7 +72,7 @@ public class DetalleReservaActivity extends AppCompatActivity {
 
     private void fetchDetalleReserva() {
         // URL de la API que devuelve los detalles de la reserva
-        String urlDetalle = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/reservaciones_clientes.php"; // Reemplaza con la URL real
+        String urlDetalle = "https://739c9dc3-0789-44cf-b9b3-0a433b602be3-00-g7yu9uuhed8k.worf.replit.dev/reservaciones_clientes.php"; // Reemplaza con la URL real
 
         // Mostrar el ProgressBar
         progressBar.setVisibility(View.VISIBLE);
