@@ -169,5 +169,6 @@ public class BienvenidaActivity extends AppCompatActivity {
         intent.putExtra("nombre", nombre);
         intent.putExtra("apellido", apellido);
         intent.putExtra("id_cliente", id_cliente);  // Se envía el id_cliente
+        startActivity(intent);
     }
 }
