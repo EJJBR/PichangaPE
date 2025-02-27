@@ -50,13 +50,13 @@ public class Ingreso extends AppCompatActivity {
     private String apellido;
     private String url = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/CMostrarCancha.php";
 
-    // Encuentra el botón por su ID
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ingreso);
-        //Inicializar los botones
+
+        // Inicializar botón para ir a la actividad de ingresos
         Button btnIngresos = findViewById(R.id.btnIngresos);
         btnIngresos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +65,7 @@ public class Ingreso extends AppCompatActivity {
             }
         });
 
-
+        // Botón para registrar nuevas canchas
         ImageButton btnAgregarCancha = findViewById(R.id.btnAgregarCancha);
         btnAgregarCancha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,13 +74,27 @@ public class Ingreso extends AppCompatActivity {
             }
         });
 
+        // Inicializar SearchView y asignar listener para filtrar canchas
+        SearchView svFiltro = findViewById(R.id.svFiltro);
+        svFiltro.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                canchaAdapter.getFilter().filter(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                canchaAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
 
         // Inicializar vistas
         tvBienvenida = findViewById(R.id.tvBienvenida);
         recyclerView = findViewById(R.id.tblMostrarCanchas);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Inicializar lista y adaptador
+        // Inicializar lista y adaptador (inicialmente vacíos)
         canchaList = new ArrayList<>();
         canchaAdapter = new CanchaAdapter(canchaList);
         recyclerView.setAdapter(canchaAdapter);
@@ -104,13 +118,12 @@ public class Ingreso extends AppCompatActivity {
             return insets;
         });
 
-        // Llamar a la función para obtener canchas
+        // Llamar a la función para obtener canchas y actualizar el adaptador
         obtenerCanchas(idCliente);
     }
 
     private void obtenerCanchas(String idDueno) {
         RequestQueue queue = Volley.newRequestQueue(this);
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -118,8 +131,7 @@ public class Ingreso extends AppCompatActivity {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             JSONArray canchasArray = jsonResponse.getJSONArray("canchas");
-                            canchaList.clear(); // Limpiar la lista antes de agregar nuevas canchas
-
+                            List<Cancha> nuevaLista = new ArrayList<>();
                             for (int i = 0; i < canchasArray.length(); i++) {
                                 JSONObject canchaObj = canchasArray.getJSONObject(i);
                                 Cancha cancha = new Cancha(
@@ -128,23 +140,22 @@ public class Ingreso extends AppCompatActivity {
                                         canchaObj.getString("direccion"),
                                         (float) canchaObj.optDouble("precio_por_hora", 0.0)
                                 );
-                                canchaList.add(cancha);
+                                nuevaLista.add(cancha);
                             }
-
-                            // Notificar al adaptador que los datos han cambiado
-                            canchaAdapter.notifyDataSetChanged();
-
+                            // Actualiza el adaptador con la nueva lista (esto actualiza también la copia para filtrar)
+                            canchaAdapter.actualizarDatos(nuevaLista);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(Ingreso.this, "Error procesando JSON", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Ingreso.this, "Error en la solicitud: " + error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }) {
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Ingreso.this, "Error en la solicitud: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -152,25 +163,21 @@ public class Ingreso extends AppCompatActivity {
                 return params;
             }
         };
-
         queue.add(stringRequest);
     }
 
-    public void irVentanaIngresos(){
+    public void irVentanaIngresos() {
         Intent intent = new Intent(Ingreso.this, BienvenidaActivity.class);
         intent.putExtra("nombre", nombre);
         intent.putExtra("apellido", apellido);
-        intent.putExtra("id_cliente", idCliente);  // Se envía el id_cliente
+        intent.putExtra("id_cliente", idCliente);
         startActivity(intent);
     }
-
+    // Ni idea comentario sin valor
     // Método para ir a la pantalla de registrar canchas
     public void irRegistrarCanchas() {
         Intent intent = new Intent(Ingreso.this, RegistrarCanchasActivity.class);
-        // Pasar los datos necesarios para mantener la sesión y el ID del dueño
         intent.putExtra("id_cliente", idCliente);
-        intent.putExtra("nombre", nombre);
-        intent.putExtra("apellido", apellido);
         startActivity(intent);
     }
 }

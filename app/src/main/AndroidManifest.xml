@@ -57,7 +57,10 @@
         <activity
             android:name=".VerificarComprobanteActivity"
             android:screenOrientation="portrait" />
+
+        <!-- Actividad Ingreso -->
         <activity android:name=".view.Ingreso" />
+
     </application>
 
 </manifest>
