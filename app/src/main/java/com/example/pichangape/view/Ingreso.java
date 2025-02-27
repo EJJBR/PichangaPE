@@ -27,7 +27,6 @@ import com.example.pichangape.BienvenidaActivity;
 import com.example.pichangape.R;
 import com.example.pichangape.RegistrarCanchasActivity;
 import com.example.pichangape.adapters.CanchaAdapter;
-import com.example.pichangape.database.login;
 import com.example.pichangape.models.Cancha;
 
 import org.json.JSONArray;
@@ -56,7 +55,7 @@ public class Ingreso extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ingreso);
 
-        // Inicializar botón para ir a la actividad de ingresos
+        // Botón para ir a la actividad de ingresos
         Button btnIngresos = findViewById(R.id.btnIngresos);
         btnIngresos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +108,13 @@ public class Ingreso extends AppCompatActivity {
             return;
         }
 
-        tvBienvenida.setText("¡Bienvenido, " + nombre + " " + apellido + "!");
+        // Si se reciben los valores "null" (como cadena) o están vacíos, ocultamos el TextView
+        if (nombre == null || nombre.equals("null") || nombre.isEmpty() ||
+                apellido == null || apellido.equals("null") || apellido.isEmpty()) {
+            tvBienvenida.setVisibility(View.GONE);
+        } else {
+            tvBienvenida.setText("¡Bienvenido, " + nombre + " " + apellido + "!");
+        }
 
         // Configurar insets para evitar superposición con la barra del sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -173,11 +178,11 @@ public class Ingreso extends AppCompatActivity {
         intent.putExtra("id_cliente", idCliente);
         startActivity(intent);
     }
-    // Ni idea comentario sin valor
-    // Método para ir a la pantalla de registrar canchas
+
     public void irRegistrarCanchas() {
         Intent intent = new Intent(Ingreso.this, RegistrarCanchasActivity.class);
         intent.putExtra("id_cliente", idCliente);
+        // No enviamos "nombre" ni "apellido" para que en la nueva pantalla no aparezca el mensaje de bienvenida
         startActivity(intent);
     }
 }
