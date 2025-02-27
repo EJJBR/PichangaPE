@@ -4,4 +4,10 @@
     <string name="nombre_tbl_mostrar_cancha">Aqui se inserta el nombre de la cancha</string>
     <string name="direccion_tbl_mostrar_cancha">Aqui se inserta la direccion de la cancha</string>
     <string name="precioPorHora_tbl_mostrar_cancha">Aqui se inserta el precio por hora de la cancha</string>
+
+ <string-array name="categorias">
+        <item>Futbol</item>
+        <item>Voley</item>
+        <item>Basquetball</item>
+ </string-array>
 </resources>
