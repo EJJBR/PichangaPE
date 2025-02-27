@@ -30,7 +30,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/cancha_mostar_canchas" />
+                android:src="@drawable/cancha_mostar_canchas"/>
 
             <!-- Contenedor de textos -->
             <LinearLayout
@@ -81,7 +81,7 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/btn_logo_editar_agregar"
                 android:contentDescription="Editar cancha"
-                android:scaleType="centerInside"
+                android:scaleType="fitCenter"
                 android:src="@drawable/editar_cancha_logo"
                 android:padding="10dp"/>
         </RelativeLayout>

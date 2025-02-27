@@ -89,19 +89,21 @@
         tools:listitem="@layout/item_cancha_mostrada" />
 
     <!-- Botón para agregar una nueva cancha -->
-    <Button
+    <ImageButton
         android:id="@+id/btnAgregarCancha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="100dp"
-        android:layout_marginBottom="35dp"
-        android:backgroundTint="@android:color/holo_red_light"
-        android:text="Agregar"
-        app:layout_constraintTop_toBottomOf="@id/tblMostrarCanchas"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/btn_logo_editar_agregar"
+        android:scaleType="fitCenter"
+        android:src="@drawable/img_btn_agregar_cancha"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tblMostrarCanchas" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
