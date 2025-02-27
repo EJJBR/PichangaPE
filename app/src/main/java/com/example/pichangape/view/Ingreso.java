@@ -1,6 +1,9 @@
 package com.example.pichangape.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,8 +22,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.pichangape.BienvenidaActivity;
 import com.example.pichangape.R;
 import com.example.pichangape.adapters.CanchaAdapter;
+import com.example.pichangape.database.login;
 import com.example.pichangape.models.Cancha;
 
 import org.json.JSONArray;
@@ -39,14 +44,24 @@ public class Ingreso extends AppCompatActivity {
     private CanchaAdapter canchaAdapter;
     private List<Cancha> canchaList;
     private String idCliente;
+    private String nombre;
+    private String apellido;
     private String url = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/CMostrarCancha.php";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ingreso);
-
+        //Inicializar los botones
+        Button btnIngresos = findViewById(R.id.btnIngresos);
+        btnIngresos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irVentanaIngresos();
+            }
+        });
         // Inicializar vistas
         tvBienvenida = findViewById(R.id.tvBienvenida);
         recyclerView = findViewById(R.id.tblMostrarCanchas);
@@ -58,8 +73,8 @@ public class Ingreso extends AppCompatActivity {
         recyclerView.setAdapter(canchaAdapter);
 
         // Obtener datos del intent
-        String nombre = getIntent().getStringExtra("nombre");
-        String apellido = getIntent().getStringExtra("apellido");
+        nombre = getIntent().getStringExtra("nombre");
+        apellido = getIntent().getStringExtra("apellido");
         idCliente = getIntent().getStringExtra("id_cliente");
 
         if (idCliente == null || idCliente.isEmpty()) {
@@ -126,5 +141,12 @@ public class Ingreso extends AppCompatActivity {
         };
 
         queue.add(stringRequest);
+    }
+    public void irVentanaIngresos(){
+        Intent intent = new Intent(Ingreso.this, BienvenidaActivity.class);
+        intent.putExtra("nombre", nombre);
+        intent.putExtra("apellido", apellido);
+        intent.putExtra("id_cliente", idCliente);  // Se envía el id_cliente
+        startActivity(intent);
     }
 }

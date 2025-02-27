@@ -58,7 +58,7 @@
             android:backgroundTint="@android:color/darker_gray"
             android:text="Ingresos"
             android:textColor="#424242"
-            app:cornerRadius="16dp" />
+            app:cornerRadius="16dp"/>
 
     </LinearLayout>
 

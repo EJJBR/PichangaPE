@@ -1,7 +1,10 @@
 package com.example.pichangape;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pichangape.adapters.EstadisticasAdapter;
 import com.example.pichangape.models.CanchaEstadistica;
+import com.example.pichangape.view.Ingreso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +39,8 @@ public class BienvenidaActivity extends AppCompatActivity {
     private List<CanchaEstadistica> listaEstadisticas;
     private EstadisticasAdapter adapter;
     private String id_cliente;
+    String nombre;
+    String apellido;
     private SearchView svFiltro; // Referencia al SearchView para filtrar
 
     @Override
@@ -47,9 +53,17 @@ public class BienvenidaActivity extends AppCompatActivity {
         rvEstadisticas = findViewById(R.id.rvEstadisticas);
         svFiltro = findViewById(R.id.svFiltro);
 
+        //Inicializar los botones
+        Button btnMisCanchas = findViewById(R.id.btnMisCanchas);
+        btnMisCanchas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irVentanaMisCanchas();
+            }
+        });
         // Recuperar los extras enviados desde la actividad de login
-        String nombre = getIntent().getStringExtra("nombre");
-        String apellido = getIntent().getStringExtra("apellido");
+        nombre = getIntent().getStringExtra("nombre");
+        apellido = getIntent().getStringExtra("apellido");
         id_cliente = getIntent().getStringExtra("id_cliente");
 
         // Verificar que se haya recibido id_cliente
@@ -149,5 +163,11 @@ public class BienvenidaActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
+    }
+    public void irVentanaMisCanchas(){
+        Intent intent = new Intent(BienvenidaActivity.this, Ingreso.class);
+        intent.putExtra("nombre", nombre);
+        intent.putExtra("apellido", apellido);
+        intent.putExtra("id_cliente", id_cliente);  // Se envía el id_cliente
     }
 }
