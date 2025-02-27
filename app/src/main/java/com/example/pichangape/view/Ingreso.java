@@ -169,6 +169,8 @@ public class Ingreso extends AppCompatActivity {
         Intent intent = new Intent(Ingreso.this, RegistrarCanchasActivity.class);
         // Pasar los datos necesarios para mantener la sesión y el ID del dueño
         intent.putExtra("id_cliente", idCliente);
+        intent.putExtra("nombre", nombre);
+        intent.putExtra("apellido", apellido);
         startActivity(intent);
     }
 }

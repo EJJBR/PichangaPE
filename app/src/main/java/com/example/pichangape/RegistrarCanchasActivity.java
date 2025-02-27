@@ -64,6 +64,8 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
         //Cargando los datos de nombre y apeliidop
         nombre = getIntent().getStringExtra("nombre");
         apellido = getIntent().getStringExtra("apellido");
+        //Probando si llego
+        Toast.makeText(this, "Bienvenido: " + nombre+" "+apellido, Toast.LENGTH_LONG).show();
     }
 
     private void obtenerIdDueno() {
