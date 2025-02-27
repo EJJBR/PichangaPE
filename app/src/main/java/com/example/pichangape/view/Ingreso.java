@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pichangape.BienvenidaActivity;
 import com.example.pichangape.R;
+import com.example.pichangape.RegistrarCanchasActivity;
 import com.example.pichangape.adapters.CanchaAdapter;
 import com.example.pichangape.database.login;
 import com.example.pichangape.models.Cancha;
@@ -48,7 +50,7 @@ public class Ingreso extends AppCompatActivity {
     private String apellido;
     private String url = "https://1ef4fe96-f665-43f1-b822-9a6a386ace94-00-eod5c4wo3wtn.kirk.replit.dev/CMostrarCancha.php";
 
-
+    // Encuentra el botón por su ID
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,17 @@ public class Ingreso extends AppCompatActivity {
                 irVentanaIngresos();
             }
         });
+
+
+        ImageButton btnAgregarCancha = findViewById(R.id.btnAgregarCancha);
+        btnAgregarCancha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irRegistrarCanchas();
+            }
+        });
+
+
         // Inicializar vistas
         tvBienvenida = findViewById(R.id.tvBienvenida);
         recyclerView = findViewById(R.id.tblMostrarCanchas);
@@ -142,11 +155,20 @@ public class Ingreso extends AppCompatActivity {
 
         queue.add(stringRequest);
     }
+
     public void irVentanaIngresos(){
         Intent intent = new Intent(Ingreso.this, BienvenidaActivity.class);
         intent.putExtra("nombre", nombre);
         intent.putExtra("apellido", apellido);
         intent.putExtra("id_cliente", idCliente);  // Se envía el id_cliente
+        startActivity(intent);
+    }
+
+    // Método para ir a la pantalla de registrar canchas
+    public void irRegistrarCanchas() {
+        Intent intent = new Intent(Ingreso.this, RegistrarCanchasActivity.class);
+        // Pasar los datos necesarios para mantener la sesión y el ID del dueño
+        intent.putExtra("id_cliente", idCliente);
         startActivity(intent);
     }
 }
