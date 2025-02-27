@@ -1,4 +1,4 @@
-package com.example.pichangape.ui.theme;
+package com.example.pichangape;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,12 +21,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pichangape.BienvenidaActivity;
 import com.example.pichangape.R;
+import com.example.pichangape.database.login;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class RegistrarCanchasActivity extends AppCompatActivity {
 
+    String nombre;
+    String apellido;
     private static final String TAG = "RegistrarCanchasActivity";
     private EditText lblNombreCancha, lblArea, lblDireccion, lblHorasDisponibles,
             lblFechasDisponibles, lblCostoPorHora;
@@ -58,6 +61,9 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
 
         // Configurar los botones
         configurarBotones();
+        //Cargando los datos de nombre y apeliidop
+        nombre = getIntent().getStringExtra("nombre");
+        apellido = getIntent().getStringExtra("apellido");
     }
 
     private void obtenerIdDueno() {
@@ -114,6 +120,12 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
             Intent intent = new Intent(RegistrarCanchasActivity.this, BienvenidaActivity.class);
             // Pasar de vuelta el ID del dueño para mantener la sesión
             intent.putExtra("id_cliente", idDueno);
+
+
+            intent.putExtra("nombre", nombre);
+
+            intent.putExtra("apellido", apellido);
+
             startActivity(intent);
             finish();
         });
