@@ -68,14 +68,14 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
         btnRechazar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                actualizarEstadoReserva("cancelado");
+                actualizarEstadoReserva("alquilada");
             }
         });
 
         btnAprobar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                actualizarEstadoReserva("pagado");
+                actualizarEstadoReserva("alquilada");
             }
         });
 
@@ -123,7 +123,7 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
      */
     private void fetchComprobante() {
         // URL de la API para obtener el voucher
-        String urlComprobante = "https://739c9dc3-0789-44cf-b9b3-0a433b602be3-00-g7yu9uuhed8k.worf.replit.dev/obtener_voucher.php";
+        String urlComprobante = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/obtener_voucher.php";
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -173,11 +173,11 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
     /**
      * Envía el nuevo estado a la API para actualizar la reserva.
      * Si la actualización es exitosa, se redirige a la pantalla de BienvenidaActivity.
-     * @param nuevoEstado "cancelado" o "pagado"
+     * @param nuevoEstado "cancelado" o "alquilada"
      */
     private void actualizarEstadoReserva(final String nuevoEstado) {
         // URL de la API para actualizar el estado
-        String urlActualizarEstado = "https://739c9dc3-0789-44cf-b9b3-0a433b602be3-00-g7yu9uuhed8k.worf.replit.dev/actualizar_estado_reserva.php";
+        String urlActualizarEstado = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/actualizar_estado_reserva.php";
 
         progressBar.setVisibility(View.VISIBLE);
 
