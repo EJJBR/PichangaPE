@@ -19,11 +19,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.pichangape.BienvenidaActivity;
-import com.example.pichangape.R;
-import com.example.pichangape.database.login;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RegistrarCanchasActivity extends AppCompatActivity {
@@ -33,13 +33,13 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
     private static final String TAG = "RegistrarCanchasActivity";
     private EditText lblNombreCancha, lblArea, lblDireccion, lblHorasDisponibles,
             lblFechasDisponibles, lblCostoPorHora;
-    private Spinner spinnerCategoria;
+    private Spinner spinnerCategoria, spinnerHoraInicio, spinnerHoraFin;
+    private Spinner spinnerDiaInicio, spinnerMesInicio, spinnerDiaFin, spinnerMesFin;
     private Button btnRegresar, btnRegistrar;
     private String categoriaSeleccionada;
     private RequestQueue requestQueue;
-    private String idDueno; // Variable para almacenar el ID del dueño
+    private String idDueno;
 
-    // URL del script PHP en tu servidor
     private static final String URL_REGISTRAR_CANCHA = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/agregar.php";
 
     @Override
@@ -47,27 +47,20 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar_canchas);
 
-        // Inicializar RequestQueue de Volley
         requestQueue = Volley.newRequestQueue(this);
 
-        // Obtener el ID del dueño del Intent
         obtenerIdDueno();
-
-        // Inicializar vistas
         inicializarVistas();
-
-        // Configurar el Spinner de categorías
         configurarSpinnerCategorias();
-
-        // Configurar los botones
+        configurarSpinnersHoras();
+        configurarSpinnersFechas();
         configurarBotones();
-        //Cargando los datos de nombre y apeliidop
+
         nombre = getIntent().getStringExtra("nombre");
         apellido = getIntent().getStringExtra("apellido");
     }
 
     private void obtenerIdDueno() {
-        // Obtener el ID del dueño que se pasó desde la actividad BienvenidaActivity
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("id_cliente")) {
             idDueno = intent.getStringExtra("id_cliente");
@@ -75,7 +68,6 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "No se encontró el ID del dueño en el Intent");
             Toast.makeText(this, "Error: No se pudo obtener la información del usuario", Toast.LENGTH_LONG).show();
-            // Si no hay ID, regresamos a la actividad anterior
             finish();
         }
     }
@@ -88,49 +80,126 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
         lblFechasDisponibles = findViewById(R.id.lblfechasdisponibles);
         lblCostoPorHora = findViewById(R.id.lblCostoporhora);
         spinnerCategoria = findViewById(R.id.spinner_categorias);
+        spinnerHoraInicio = findViewById(R.id.spinner_hora_inicio);
+        spinnerHoraFin = findViewById(R.id.spinner_hora_fin);
+
+        spinnerDiaInicio = findViewById(R.id.spinner_dia_inicio);
+        spinnerMesInicio = findViewById(R.id.spinner_mes_inicio);
+        spinnerDiaFin = findViewById(R.id.spinner_dia_fin);
+        spinnerMesFin = findViewById(R.id.spinner_mes_fin);
+
         btnRegresar = findViewById(R.id.btnRegresar);
         btnRegistrar = findViewById(R.id.btnRegistrar);
     }
 
+    private void configurarSpinnersHoras() {
+        List<String> horas = new ArrayList<>();
+        for (int i = 0; i < 24; i++) {
+            horas.add(String.format("%02d:00", i));
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, horas);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerHoraInicio.setAdapter(adapter);
+        spinnerHoraFin.setAdapter(adapter);
+
+        spinnerHoraInicio.setSelection(8);
+        spinnerHoraFin.setSelection(22);
+
+        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                actualizarTextoHoras();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        };
+
+        spinnerHoraInicio.setOnItemSelectedListener(listener);
+        spinnerHoraFin.setOnItemSelectedListener(listener);
+        actualizarTextoHoras();
+    }
+
+    private void actualizarTextoHoras() {
+        String inicio = spinnerHoraInicio.getSelectedItem().toString();
+        String fin = spinnerHoraFin.getSelectedItem().toString();
+        lblHorasDisponibles.setText(inicio + "-" + fin);
+    }
+
+    private void configurarSpinnersFechas() {
+        List<String> dias = new ArrayList<>();
+        for (int i = 1; i <= 31; i++) dias.add(String.format("%02d", i));
+
+        List<String> meses = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) meses.add(String.format("%02d", i));
+
+        ArrayAdapter<String> adapterDias = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dias);
+        ArrayAdapter<String> adapterMeses = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, meses);
+
+        adapterDias.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterMeses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerDiaInicio.setAdapter(adapterDias);
+        spinnerMesInicio.setAdapter(adapterMeses);
+        spinnerDiaFin.setAdapter(adapterDias);
+        spinnerMesFin.setAdapter(adapterMeses);
+
+        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                actualizarTextoFechas();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        };
+
+        spinnerDiaInicio.setOnItemSelectedListener(listener);
+        spinnerMesInicio.setOnItemSelectedListener(listener);
+        spinnerDiaFin.setOnItemSelectedListener(listener);
+        spinnerMesFin.setOnItemSelectedListener(listener);
+
+        actualizarTextoFechas();
+    }
+
+    private void actualizarTextoFechas() {
+        int anioActual = Calendar.getInstance().get(Calendar.YEAR);
+        String fechaI = anioActual + "-" +
+                        spinnerMesInicio.getSelectedItem().toString() + "-" +
+                        spinnerDiaInicio.getSelectedItem().toString();
+        String fechaF = anioActual + "-" +
+                        spinnerMesFin.getSelectedItem().toString() + "-" +
+                        spinnerDiaFin.getSelectedItem().toString();
+        lblFechasDisponibles.setText(fechaI + ", " + fechaF);
+    }
+
     private void configurarSpinnerCategorias() {
-        // Adaptador para llenar el Spinner con los valores del array de strings.xml
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.categorias, android.R.layout.simple_spinner_item);
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategoria.setAdapter(adapter);
 
-        // Manejar la selección de un ítem
         spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 categoriaSeleccionada = parent.getItemAtPosition(position).toString();
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // No hacer nada
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 
     private void configurarBotones() {
-        // Configurar botón Regresar
         btnRegresar.setOnClickListener(v -> {
             Intent intent = new Intent(RegistrarCanchasActivity.this, BienvenidaActivity.class);
-            // Pasar de vuelta el ID del dueño para mantener la sesión
             intent.putExtra("id_cliente", idDueno);
-
-
             intent.putExtra("nombre", nombre);
-
             intent.putExtra("apellido", apellido);
-
             startActivity(intent);
             finish();
         });
 
-        // Configurar botón Registrar
         btnRegistrar.setOnClickListener(v -> {
             if (validarCampos()) {
                 registrarCancha();
@@ -149,7 +218,11 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
             return false;
         }
 
-        // Validar que el costo por hora sea un número válido
+        if (spinnerHoraInicio.getSelectedItemPosition() >= spinnerHoraFin.getSelectedItemPosition()) {
+            Toast.makeText(this, "La hora de inicio debe ser menor a la hora de fin", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         try {
             Double.parseDouble(lblCostoPorHora.getText().toString().trim());
         } catch (NumberFormatException e) {
@@ -161,45 +234,35 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
     }
 
     private void registrarCancha() {
-        // Verificar que tenemos el ID del dueño antes de continuar
         if (idDueno == null || idDueno.isEmpty()) {
             Toast.makeText(this, "Error: No se pudo identificar al usuario", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Mostrar un mensaje de carga
         Toast.makeText(this, "Registrando cancha...", Toast.LENGTH_SHORT).show();
 
-        // Crear una solicitud de cadena para enviar al servidor PHP
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REGISTRAR_CANCHA,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "Respuesta del servidor: " + response);
-
                         if (response.trim().equals("success")) {
-                            Toast.makeText(RegistrarCanchasActivity.this,
-                                    "Cancha registrada exitosamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrarCanchasActivity.this, "Cancha registrada exitosamente", Toast.LENGTH_SHORT).show();
                             limpiarCampos();
                         } else {
-                            Toast.makeText(RegistrarCanchasActivity.this,
-                                    "Error al registrar la cancha: " + response, Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegistrarCanchasActivity.this, "Error: " + response, Toast.LENGTH_LONG).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "Error de Volley: " + error.toString());
-                        Toast.makeText(RegistrarCanchasActivity.this,
-                                "Error de conexión. Intente nuevamente.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegistrarCanchasActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-
-                // Usar el ID dinámico del dueño en lugar del ID fijo "2"
                 params.put("id_dueno", idDueno);
                 params.put("nombre", lblNombreCancha.getText().toString().trim());
                 params.put("direccion", lblDireccion.getText().toString().trim());
@@ -208,12 +271,10 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
                 params.put("horasDisponibles", lblHorasDisponibles.getText().toString().trim());
                 params.put("fechas_abiertas", lblFechasDisponibles.getText().toString().trim());
                 params.put("estado", "activa");
-
                 return params;
             }
         };
 
-        // Añadir la solicitud a la cola
         requestQueue.add(stringRequest);
     }
 
@@ -221,9 +282,17 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
         lblNombreCancha.setText("");
         lblArea.setText("");
         lblDireccion.setText("");
-        lblHorasDisponibles.setText("");
-        lblFechasDisponibles.setText("");
         lblCostoPorHora.setText("");
         spinnerCategoria.setSelection(0);
+        spinnerHoraInicio.setSelection(8);
+        spinnerHoraFin.setSelection(22);
+        
+        spinnerDiaInicio.setSelection(0);
+        spinnerMesInicio.setSelection(0);
+        spinnerDiaFin.setSelection(0);
+        spinnerMesFin.setSelection(0);
+        
+        actualizarTextoHoras();
+        actualizarTextoFechas();
     }
 }

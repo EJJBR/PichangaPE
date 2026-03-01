@@ -301,9 +301,9 @@ public class ReservacionesActivity extends AppCompatActivity {
                 // Definir posiciones fijas para las columnas de la tabla
                 int colN = margin;                      // Columna para el número (ancho: 30 px)
                 int colInicio = colN + 30;                // Columna "Inicio" (ancho: 120 px)
-                int colFin = colInicio + 120;             // Columna "Fin" (ancho: 120 px)
-                int colPrecio = colFin + 120;             // Columna "Precio" (ancho: 100 px)
-                int colEstado = colPrecio + 100;          // Columna "Estado" (hasta el final)
+                int colFin = colInicio + 150;             // Columna "Fin" (ancho: 120 px)
+                int colPrecio = colFin + 150;             // Columna "Precio" (ancho: 80 px)
+                int colEstado = colPrecio + 80;          // Columna "Estado" (hasta el final)
 
                 // Encabezados de la tabla
                 canvas.drawText("N°", colN, currentY, labelPaint);
@@ -320,10 +320,11 @@ public class ReservacionesActivity extends AppCompatActivity {
                 // Listado de reservas
                 for (int i = 0; i < reservas.length(); i++) {
                     JSONObject reserva = reservas.getJSONObject(i);
-                    String inicio = reserva.getString("fecha_hora_inicio");
-                    String fin = reserva.getString("fecha_hora_fin");
-                    String precioTotal = reserva.getString("precio_total");
-                    String estadoRes = reserva.getString("estado_reserva");
+                    // Corrección de nombres de campos para que coincidan con el JSON de la API
+                    String inicio = reserva.getString("inicio");
+                    String fin = reserva.getString("fin");
+                    String precioTotal = reserva.getString("precio");
+                    String estadoRes = reserva.getString("estado");
 
                     canvas.drawText(String.valueOf(i + 1), colN, currentY, textPaint);
                     canvas.drawText(inicio, colInicio, currentY, textPaint);
