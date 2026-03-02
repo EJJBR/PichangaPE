@@ -63,9 +63,14 @@
         <!-- Actividad Ingreso -->
         <activity android:name=".view.Ingreso" />
 
-        <!-- Actividad de Registro de Cliente (Nueva) -->
+        <!-- Actividad de Registro de Cliente -->
         <activity android:name=".RegistroClienteActivity"
             android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+
+        <!-- Actividad Principal del Cliente (Nueva) -->
+        <activity android:name=".ClienteMainActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
     </application>

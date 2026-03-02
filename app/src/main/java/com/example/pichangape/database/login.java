@@ -18,6 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pichangape.ApiConfig;
+import com.example.pichangape.BienvenidaActivity;
+import com.example.pichangape.ClienteMainActivity;
 import com.example.pichangape.R;
 import com.example.pichangape.RegistroClienteActivity;
 import com.example.pichangape.models.ConexionDuenio;
@@ -88,35 +90,27 @@ public class login extends AppCompatActivity {
                                 Toast.makeText(login.this, jsonObject.getString("error"), Toast.LENGTH_LONG).show();
                             } else {
                                 String rol = jsonObject.getString("rol");
-                                if (rol.equals("dueño")) {
-                                    // Proceso para DUEÑO
-                                    ConexionDuenio duenio = new ConexionDuenio(
-                                            jsonObject.getString("id_cliente"),
-                                            jsonObject.getString("nombre"),
-                                            jsonObject.getString("apellido"),
-                                            jsonObject.getString("numeroCel"),
-                                            jsonObject.getString("correo"),
-                                            jsonObject.getString("documento"),
-                                            jsonObject.getString("tipoDoc"),
-                                            jsonObject.getString("fechaNac"),
-                                            jsonObject.getString("usuario"),
-                                            jsonObject.getString("password"),
-                                            jsonObject.getString("rol"),
-                                            jsonObject.getString("numYape"),
-                                            jsonObject.getString("numTransfer")
-                                    );
-                                    Toast.makeText(login.this, "Bienvenido " + duenio.getNombre() + " " + duenio.getApellido(), Toast.LENGTH_LONG).show();
+                                String id_cliente = jsonObject.getString("id_cliente");
+                                String nombre = jsonObject.getString("nombre");
+                                String apellido = jsonObject.getString("apellido");
 
+                                if (rol.equals("dueño")) {
+                                    // Redirigir a Panel de Dueño
+                                    Toast.makeText(login.this, "Bienvenido " + nombre + " " + apellido, Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(login.this, Ingreso.class);
-                                    intent.putExtra("nombre", duenio.getNombre());
-                                    intent.putExtra("apellido", duenio.getApellido());
-                                    intent.putExtra("id_cliente", duenio.getId_cliente());
+                                    intent.putExtra("nombre", nombre);
+                                    intent.putExtra("apellido", apellido);
+                                    intent.putExtra("id_cliente", id_cliente);
                                     startActivity(intent);
 
                                 } else if (rol.equals("cliente")) {
-                                    // Proceso temporal para CLIENTE
-                                    String nombreCli = jsonObject.getString("nombre");
-                                    Toast.makeText(login.this, "Bienvenido cliente " + nombreCli + ", próximamente tendremos activada su opción.", Toast.LENGTH_LONG).show();
+                                    // REDIRIGIR A PANEL DE CLIENTE (Nueva Pantalla)
+                                    Toast.makeText(login.this, "Bienvenido " + nombre, Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(login.this, ClienteMainActivity.class);
+                                    intent.putExtra("nombre", nombre);
+                                    intent.putExtra("apellido", apellido);
+                                    intent.putExtra("id_cliente", id_cliente);
+                                    startActivity(intent);
                                     
                                 } else {
                                     Toast.makeText(login.this, "Rol no reconocido.", Toast.LENGTH_LONG).show();
