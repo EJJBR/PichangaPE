@@ -18,8 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pichangape.ApiConfig;
-import com.example.pichangape.BienvenidaActivity;
 import com.example.pichangape.R;
+import com.example.pichangape.RegistroClienteActivity;
 import com.example.pichangape.models.ConexionDuenio;
 import com.example.pichangape.view.Ingreso;
 
@@ -46,6 +46,16 @@ public class login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loguearse();
+            }
+        });
+
+        // VINCULACIÓN DEL BOTÓN DE REGISTRO
+        Button btnRegistrarse = findViewById(R.id.btnRegistrarse);
+        btnRegistrarse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(login.this, RegistroClienteActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -79,7 +89,7 @@ public class login extends AppCompatActivity {
                             } else {
                                 String rol = jsonObject.getString("rol");
                                 if (rol.equals("dueño")) {
-                                    // Crear objeto Dueño con los datos del JSON
+                                    // Proceso para DUEÑO
                                     ConexionDuenio duenio = new ConexionDuenio(
                                             jsonObject.getString("id_cliente"),
                                             jsonObject.getString("nombre"),
@@ -97,15 +107,19 @@ public class login extends AppCompatActivity {
                                     );
                                     Toast.makeText(login.this, "Bienvenido " + duenio.getNombre() + " " + duenio.getApellido(), Toast.LENGTH_LONG).show();
 
-                                    //Fragmetno mio para llamar a mi propia pantalla de ingreso
                                     Intent intent = new Intent(login.this, Ingreso.class);
                                     intent.putExtra("nombre", duenio.getNombre());
                                     intent.putExtra("apellido", duenio.getApellido());
                                     intent.putExtra("id_cliente", duenio.getId_cliente());
                                     startActivity(intent);
 
+                                } else if (rol.equals("cliente")) {
+                                    // Proceso temporal para CLIENTE
+                                    String nombreCli = jsonObject.getString("nombre");
+                                    Toast.makeText(login.this, "Bienvenido cliente " + nombreCli + ", próximamente tendremos activada su opción.", Toast.LENGTH_LONG).show();
+                                    
                                 } else {
-                                    Toast.makeText(login.this, "Acceso denegado. No eres dueño.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(login.this, "Rol no reconocido.", Toast.LENGTH_LONG).show();
                                 }
                             }
                         } catch (JSONException e) {

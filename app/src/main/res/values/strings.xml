@@ -5,10 +5,16 @@
     <string name="direccion_tbl_mostrar_cancha">Aqui se inserta la direccion de la cancha</string>
     <string name="precioPorHora_tbl_mostrar_cancha">Aqui se inserta el precio por hora de la cancha</string>
 
- <string-array name="categorias">
+    <string-array name="categorias">
         <item>Futbol</item>
         <item>Voley</item>
         <item>Basket</item>
         <item>Otro</item>
- </string-array>
+    </string-array>
+
+    <string-array name="tipos_documento">
+        <item>DNI</item>
+        <item>Pasaporte</item>
+        <item>Carnet de Extranjería</item>
+    </string-array>
 </resources>

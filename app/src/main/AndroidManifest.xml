@@ -63,6 +63,11 @@
         <!-- Actividad Ingreso -->
         <activity android:name=".view.Ingreso" />
 
+        <!-- Actividad de Registro de Cliente (Nueva) -->
+        <activity android:name=".RegistroClienteActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+
     </application>
 
 </manifest>
