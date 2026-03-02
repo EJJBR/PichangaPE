@@ -69,8 +69,6 @@ public class BienvenidaActivity extends AppCompatActivity {
         // Verificar que se haya recibido id_cliente
         if (id_cliente == null || id_cliente.isEmpty()){
             Toast.makeText(this, "ID de cliente no recibido", Toast.LENGTH_SHORT).show();
-            // Puedes finalizar la actividad o asignar un valor por defecto para pruebas
-            // finish();
             return;
         }
 
@@ -88,7 +86,7 @@ public class BienvenidaActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 adapter.getFilter().filter(query);
-                return false; // No se consume el evento para seguir mostrando resultados
+                return false; 
             }
 
             @Override
@@ -103,8 +101,8 @@ public class BienvenidaActivity extends AppCompatActivity {
     }
 
     private void fetchEstadisticas() {
-        // URL de la API que retorna las estadísticas filtradas por id_cliente
-        String urlEstadisticas = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/estadisticas_Canchas.php";
+        // URL centralizada con ApiConfig
+        String urlEstadisticas = ApiConfig.BASE_URL + "estadisticas_Canchas.php";
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Cargando estadísticas...");
@@ -116,10 +114,7 @@ public class BienvenidaActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         progressDialog.dismiss();
                         try {
-                            // Se asume que la respuesta es un arreglo JSON
                             JSONArray jsonArray = new JSONArray(response);
-
-                            // Limpiar la lista actual (en caso de recargar datos)
                             listaEstadisticas.clear();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -134,7 +129,6 @@ public class BienvenidaActivity extends AppCompatActivity {
                                 listaEstadisticas.add(estadistica);
                             }
 
-                            // Reinicializamos el adapter para que actualice también su lista completa interna
                             adapter = new EstadisticasAdapter(BienvenidaActivity.this, listaEstadisticas);
                             rvEstadisticas.setAdapter(adapter);
 
@@ -154,7 +148,6 @@ public class BienvenidaActivity extends AppCompatActivity {
         ) {
             @Override
             protected Map<String, String> getParams() {
-                // Enviar el id_cliente para filtrar las canchas del usuario
                 Map<String, String> params = new HashMap<>();
                 params.put("id_cliente", id_cliente);
                 return params;
@@ -168,7 +161,7 @@ public class BienvenidaActivity extends AppCompatActivity {
         Intent intent = new Intent(BienvenidaActivity.this, Ingreso.class);
         intent.putExtra("nombre", nombre);
         intent.putExtra("apellido", apellido);
-        intent.putExtra("id_cliente", id_cliente);  // Se envía el id_cliente
+        intent.putExtra("id_cliente", id_cliente);
         startActivity(intent);
     }
 }

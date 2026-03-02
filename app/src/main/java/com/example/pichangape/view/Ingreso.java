@@ -23,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.pichangape.ApiConfig;
 import com.example.pichangape.BienvenidaActivity;
 import com.example.pichangape.R;
 import com.example.pichangape.RegistrarCanchasActivity;
@@ -47,7 +48,8 @@ public class Ingreso extends AppCompatActivity {
     private String idCliente;
     private String nombre;
     private String apellido;
-    private String url = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/CMostrarCancha.php";
+    // URL centralizada con ApiConfig
+    private String url = ApiConfig.BASE_URL + "CMostrarCancha.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +149,7 @@ public class Ingreso extends AppCompatActivity {
                                 );
                                 nuevaLista.add(cancha);
                             }
-                            // Actualiza el adaptador con la nueva lista (esto actualiza también la copia para filtrar)
+                            // Actualiza el adaptador con la nueva lista
                             canchaAdapter.actualizarDatos(nuevaLista);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -182,7 +184,6 @@ public class Ingreso extends AppCompatActivity {
     public void irRegistrarCanchas() {
         Intent intent = new Intent(Ingreso.this, RegistrarCanchasActivity.class);
         intent.putExtra("id_cliente", idCliente);
-        // ENVIAR NOMBRE Y APELLIDO PARA NO PERDERLOS AL REGRESAR
         intent.putExtra("nombre", nombre);
         intent.putExtra("apellido", apellido);
         startActivity(intent);

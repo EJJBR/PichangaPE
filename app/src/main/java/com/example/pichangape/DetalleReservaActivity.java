@@ -47,7 +47,7 @@ public class DetalleReservaActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         btnVerificarComprobante = findViewById(R.id.btnVerificarComprobante);
 
-        // Recuperar el id_reserva enviado desde el adaptador
+        // Recuperar el id_reserva enviado desde la adaptador
         idReserva = getIntent().getIntExtra("id_reserva", -1);
         if (idReserva == -1) {
             Toast.makeText(this, "No se recibió el ID de la reserva", Toast.LENGTH_SHORT).show();
@@ -71,8 +71,8 @@ public class DetalleReservaActivity extends AppCompatActivity {
     }
 
     private void fetchDetalleReserva() {
-        // URL de la API que devuelve los detalles de la reserva
-        String urlDetalle = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/reservaciones_clientes.php"; // Reemplaza con la URL real
+        // URL de la API centralizada con ApiConfig
+        String urlDetalle = ApiConfig.BASE_URL + "reservaciones_clientes.php";
 
         // Mostrar el ProgressBar
         progressBar.setVisibility(View.VISIBLE);

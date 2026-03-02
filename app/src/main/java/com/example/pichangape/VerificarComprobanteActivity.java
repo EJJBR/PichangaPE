@@ -68,13 +68,15 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
         btnRechazar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                actualizarEstadoReserva("alquilada");
+                // Se envía "cancelado" para rechazar
+                actualizarEstadoReserva("cancelado");
             }
         });
 
         btnAprobar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Se envía "alquilada" para aprobar
                 actualizarEstadoReserva("alquilada");
             }
         });
@@ -122,8 +124,8 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
      * Obtiene y muestra el comprobante.
      */
     private void fetchComprobante() {
-        // URL de la API para obtener el voucher
-        String urlComprobante = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/obtener_voucher.php";
+        // URL centralizada
+        String urlComprobante = ApiConfig.BASE_URL + "obtener_voucher.php";
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -142,6 +144,8 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
                             String imageUrl = jsonObject.getString("image_url");
                             Glide.with(VerificarComprobanteActivity.this)
                                     .load(imageUrl)
+                                    .placeholder(android.R.drawable.progress_horizontal)
+                                    .error(android.R.drawable.stat_notify_error)
                                     .into(ivComprobante);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -176,8 +180,8 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
      * @param nuevoEstado "cancelado" o "alquilada"
      */
     private void actualizarEstadoReserva(final String nuevoEstado) {
-        // URL de la API para actualizar el estado
-        String urlActualizarEstado = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/actualizar_estado_reserva.php";
+        // URL centralizada
+        String urlActualizarEstado = ApiConfig.BASE_URL + "actualizar_estado_reserva.php";
 
         progressBar.setVisibility(View.VISIBLE);
 

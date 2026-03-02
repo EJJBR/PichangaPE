@@ -41,7 +41,7 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private String idDueno;
 
-    private static final String URL_REGISTRAR_CANCHA = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/agregar.php";
+    private static final String URL_REGISTRAR_CANCHA = ApiConfig.BASE_URL + "agregar.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

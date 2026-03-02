@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.pichangape.ApiConfig;
 import com.example.pichangape.BienvenidaActivity;
 import com.example.pichangape.R;
 import com.example.pichangape.models.ConexionDuenio;
@@ -32,7 +33,7 @@ import java.util.Map;
 public class login extends AppCompatActivity {
     EditText txtUsuario, pswContrasenia;
     String strUsuario, strContrasenia;
-    String url = "https://1fe8107b-4bc6-4865-9bbd-dbd93570a5ba-00-z75lvfccgfim.worf.replit.dev/CLogin.php";
+    String url = ApiConfig.BASE_URL + "CLogin.php";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -96,12 +97,6 @@ public class login extends AppCompatActivity {
                                     );
                                     Toast.makeText(login.this, "Bienvenido " + duenio.getNombre() + " " + duenio.getApellido(), Toast.LENGTH_LONG).show();
 
-                                    // Incluir id_cliente en el Intent-fragmento de codigo de Tejeada para llamaar a su pantalla de bienvenida
-                                    /*Intent intent = new Intent(login.this, BienvenidaActivity.class);
-                                    intent.putExtra("nombre", duenio.getNombre());
-                                    intent.putExtra("apellido", duenio.getApellido());
-                                    intent.putExtra("id_cliente", duenio.getId_cliente());  // Se envía el id_cliente
-                                    startActivity(intent);*/
                                     //Fragmetno mio para llamar a mi propia pantalla de ingreso
                                     Intent intent = new Intent(login.this, Ingreso.class);
                                     intent.putExtra("nombre", duenio.getNombre());
