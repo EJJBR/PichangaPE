@@ -108,7 +108,7 @@ public class Ingreso extends AppCompatActivity {
             return;
         }
 
-        // Si se reciben los valores "null" (como cadena) o están vacíos, ocultamos el TextView
+        // Mostrar saludo
         if (nombre == null || nombre.equals("null") || nombre.isEmpty() ||
                 apellido == null || apellido.equals("null") || apellido.isEmpty()) {
             tvBienvenida.setVisibility(View.GONE);
@@ -182,7 +182,9 @@ public class Ingreso extends AppCompatActivity {
     public void irRegistrarCanchas() {
         Intent intent = new Intent(Ingreso.this, RegistrarCanchasActivity.class);
         intent.putExtra("id_cliente", idCliente);
-        // No enviamos "nombre" ni "apellido" para que en la nueva pantalla no aparezca el mensaje de bienvenida
+        // ENVIAR NOMBRE Y APELLIDO PARA NO PERDERLOS AL REGRESAR
+        intent.putExtra("nombre", nombre);
+        intent.putExtra("apellido", apellido);
         startActivity(intent);
     }
 }

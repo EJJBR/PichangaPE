@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.pichangape.view.Ingreso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,15 +50,16 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
 
+        // OBTENER DATOS PRIMERO
+        nombre = getIntent().getStringExtra("nombre");
+        apellido = getIntent().getStringExtra("apellido");
         obtenerIdDueno();
+
         inicializarVistas();
         configurarSpinnerCategorias();
         configurarSpinnersHoras();
         configurarSpinnersFechas();
         configurarBotones();
-
-        nombre = getIntent().getStringExtra("nombre");
-        apellido = getIntent().getStringExtra("apellido");
     }
 
     private void obtenerIdDueno() {
@@ -192,7 +194,7 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
 
     private void configurarBotones() {
         btnRegresar.setOnClickListener(v -> {
-            Intent intent = new Intent(RegistrarCanchasActivity.this, BienvenidaActivity.class);
+            Intent intent = new Intent(RegistrarCanchasActivity.this, Ingreso.class);
             intent.putExtra("id_cliente", idDueno);
             intent.putExtra("nombre", nombre);
             intent.putExtra("apellido", apellido);

@@ -8,6 +8,7 @@
  <string-array name="categorias">
         <item>Futbol</item>
         <item>Voley</item>
-        <item>Basquetball</item>
+        <item>Basket</item>
+        <item>Otro</item>
  </string-array>
 </resources>
