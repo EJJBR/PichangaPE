@@ -6,12 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegistrarCanchasActivity"
-    android:background="@color/design_default_color_background"
-    android:orientation="vertical">
+    android:background="@color/design_default_color_background">
 
+    <!-- El ScrollView permite que el formulario se desplace hacia arriba -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -26,31 +31,11 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
                 android:backgroundTint="@color/black"
-                android:ems="10"
                 android:hint="Nombre de la cancha"
                 android:inputType="text"
                 android:minHeight="48dp"
                 android:textColor="#101010"
-                android:textColorHint="#6D0F0E0E"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/lblArea"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="32dp"
-                android:backgroundTint="@color/black"
-                android:ems="10"
-                android:hint="Area (ejemplo 45x90)"
-                android:inputType="text"
-                android:minHeight="48dp"
-                android:textColor="#101010"
-                android:textColorHint="#6D0F0E0E"
-                app:layout_constraintTop_toBottomOf="@+id/lblNombreCancha"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
@@ -62,7 +47,7 @@
                 android:text="Categoría:"
                 android:textColor="#101010"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lblArea" />
+                app:layout_constraintTop_toBottomOf="@+id/lblNombreCancha" />
 
             <Spinner
                 android:id="@+id/spinner_categorias"
@@ -71,7 +56,6 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="8dp"
-                android:spinnerMode="dropdown"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvCategoriaLabel" />
@@ -84,12 +68,10 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="32dp"
                 android:backgroundTint="@color/black"
-                android:ems="10"
                 android:hint="Dirección"
                 android:inputType="text"
                 android:minHeight="48dp"
                 android:textColor="#101010"
-                android:textColorHint="#6D0F0E0E"
                 app:layout_constraintTop_toBottomOf="@+id/spinner_categorias"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -113,25 +95,9 @@
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/tvHorasLabel">
-
-                <Spinner
-                    android:id="@+id/spinner_hora_inicio"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" a "
-                    android:textColor="#101010"
-                    android:layout_gravity="center_vertical" />
-
-                <Spinner
-                    android:id="@+id/spinner_hora_fin"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1" />
+                <Spinner android:id="@+id/spinner_hora_inicio" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" a " android:textColor="#101010" android:layout_gravity="center_vertical" />
+                <Spinner android:id="@+id/spinner_hora_fin" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" />
             </LinearLayout>
 
             <EditText
@@ -142,14 +108,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:backgroundTint="@color/black"
-                android:ems="10"
-                android:hint="Horas resultantes"
                 android:focusable="false"
-                android:clickable="false"
-                android:inputType="text"
+                android:hint="Horas resultantes"
                 android:minHeight="48dp"
                 android:textColor="#101010"
-                android:textColorHint="#6D0F0E0E"
                 app:layout_constraintTop_toBottomOf="@+id/lyHoras"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -173,12 +135,7 @@
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/tvFechasLabel">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Desde: "
-                    android:textColor="#101010"
-                    android:layout_gravity="center_vertical"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Desde: " android:textColor="#101010" android:layout_gravity="center_vertical"/>
                 <Spinner android:id="@+id/spinner_dia_inicio" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" />
                 <Spinner android:id="@+id/spinner_mes_inicio" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" />
             </LinearLayout>
@@ -192,12 +149,7 @@
                 android:layout_marginTop="4dp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/lyFechaInicio">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hasta: "
-                    android:textColor="#101010"
-                    android:layout_gravity="center_vertical"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hasta: " android:textColor="#101010" android:layout_gravity="center_vertical"/>
                 <Spinner android:id="@+id/spinner_dia_fin" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" />
                 <Spinner android:id="@+id/spinner_mes_fin" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" />
             </LinearLayout>
@@ -210,14 +162,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:backgroundTint="@color/black"
-                android:ems="10"
-                android:hint="Fechas resultantes"
                 android:focusable="false"
-                android:clickable="false"
-                android:inputType="text"
+                android:hint="Fechas resultantes"
                 android:minHeight="48dp"
                 android:textColor="#101010"
-                android:textColorHint="#6D0F0E0E"
                 app:layout_constraintTop_toBottomOf="@+id/lyFechaFin"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -229,12 +177,10 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="32dp"
                 android:backgroundTint="@color/black"
-                android:ems="10"
                 android:hint="Costo por hora"
                 android:inputType="numberDecimal"
                 android:minHeight="48dp"
                 android:textColor="#101010"
-                android:textColorHint="#6D0F0E0E"
                 app:layout_constraintTop_toBottomOf="@+id/lblfechasdisponibles"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -245,25 +191,8 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/lblCostoporhora">
-
-                <Button
-                    android:id="@+id/btnRegresar"
-                    android:layout_width="140dp"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="16dp"
-                    android:backgroundTint="@drawable/btn_color_selector"
-                    android:text="Regresar"
-                    android:textColor="#FDFDFD"
-                    app:cornerRadius="4dp" />
-
-                <Button
-                    android:id="@+id/btnRegistrar"
-                    android:layout_width="140dp"
-                    android:layout_height="50dp"
-                    android:backgroundTint="@drawable/btn_color_selector"
-                    android:text="Registrar"
-                    android:textColor="#FDFDFD"
-                    app:cornerRadius="4dp" />
+                <Button android:id="@+id/btnRegresar" android:layout_width="140dp" android:layout_height="50dp" android:layout_marginEnd="16dp" android:backgroundTint="@drawable/btn_color_selector" android:text="Regresar" android:textColor="#FDFDFD" app:cornerRadius="4dp" />
+                <Button android:id="@+id/btnRegistrar" android:layout_width="140dp" android:layout_height="50dp" android:backgroundTint="@drawable/btn_color_selector" android:text="Registrar" android:textColor="#FDFDFD" app:cornerRadius="4dp" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

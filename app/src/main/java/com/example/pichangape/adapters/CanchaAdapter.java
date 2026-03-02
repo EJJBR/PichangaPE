@@ -1,14 +1,19 @@
 package com.example.pichangape.adapters;
+
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pichangape.R;
+import com.example.pichangape.RegistrarCanchasActivity;
 import com.example.pichangape.models.Cancha;
 
 import java.util.ArrayList;
@@ -18,11 +23,15 @@ public class CanchaAdapter extends RecyclerView.Adapter<CanchaAdapter.ViewHolder
 
     private List<Cancha> canchaList;          // Lista que se muestra
     private List<Cancha> canchaListFull;      // Copia completa para filtrar
+    private String idCliente, nombre, apellido; // Datos del dueño para mantener la sesión
 
-    public CanchaAdapter(List<Cancha> canchaList) {
+    // Constructor actualizado para recibir datos del dueño
+    public CanchaAdapter(List<Cancha> canchaList, String idCliente, String nombre, String apellido) {
         this.canchaList = new ArrayList<>(canchaList);
-        // Crear una copia de la lista original para filtrar
         this.canchaListFull = new ArrayList<>(canchaList);
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.apellido = apellido;
     }
 
     @NonNull
@@ -39,6 +48,28 @@ public class CanchaAdapter extends RecyclerView.Adapter<CanchaAdapter.ViewHolder
         holder.tvNombre.setText(cancha.getNombre());
         holder.tvUbicacion.setText(cancha.getUbicacion());
         holder.tvPrecioHora.setText(String.valueOf(cancha.getPrecioHora()));
+
+        // Programar clic en el botón de editar
+        holder.btnEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, RegistrarCanchasActivity.class);
+                
+                // Datos de la cancha para edición
+                intent.putExtra("id_cancha", cancha.getIdCancha());
+                intent.putExtra("nombre_cancha", cancha.getNombre());
+                intent.putExtra("direccion", cancha.getUbicacion());
+                intent.putExtra("precio", String.valueOf(cancha.getPrecioHora()));
+                
+                // IMPORTANTE: Enviamos los datos del dueño para no perder la sesión
+                intent.putExtra("id_cliente", idCliente);
+                intent.putExtra("nombre", nombre);
+                intent.putExtra("apellido", apellido);
+                
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -60,7 +91,6 @@ public class CanchaAdapter extends RecyclerView.Adapter<CanchaAdapter.ViewHolder
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (Cancha cancha : canchaListFull) {
-                    // Filtrar por nombre o ubicación
                     if (cancha.getNombre().toLowerCase().contains(filterPattern) ||
                             cancha.getUbicacion().toLowerCase().contains(filterPattern)) {
                         filteredList.add(cancha);
@@ -80,7 +110,6 @@ public class CanchaAdapter extends RecyclerView.Adapter<CanchaAdapter.ViewHolder
         }
     };
 
-    // Método para actualizar ambas listas cuando se obtienen nuevos datos
     public void actualizarDatos(List<Cancha> nuevaLista) {
         canchaList.clear();
         canchaList.addAll(nuevaLista);
@@ -91,12 +120,14 @@ public class CanchaAdapter extends RecyclerView.Adapter<CanchaAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvNombre, tvUbicacion, tvPrecioHora;
+        ImageButton btnEditar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNombre = itemView.findViewById(R.id.tvNombre);
             tvUbicacion = itemView.findViewById(R.id.tvUbicacion);
             tvPrecioHora = itemView.findViewById(R.id.precioHoraCancha);
+            btnEditar = itemView.findViewById(R.id.btnEditar);
         }
     }
 }

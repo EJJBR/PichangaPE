@@ -57,6 +57,16 @@ public class Ingreso extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ingreso);
 
+        // Obtener datos del intent al principio
+        nombre = getIntent().getStringExtra("nombre");
+        apellido = getIntent().getStringExtra("apellido");
+        idCliente = getIntent().getStringExtra("id_cliente");
+
+        if (idCliente == null || idCliente.isEmpty()) {
+            Toast.makeText(this, "ID de cliente no recibido", Toast.LENGTH_SHORT).show();
+            // No terminamos la actividad para permitir depuración, pero podrías poner finish()
+        }
+
         // Botón para ir a la actividad de ingresos
         Button btnIngresos = findViewById(R.id.btnIngresos);
         btnIngresos.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +85,25 @@ public class Ingreso extends AppCompatActivity {
             }
         });
 
-        // Inicializar SearchView y asignar listener para filtrar canchas
+        // Inicializar vistas
+        tvBienvenida = findViewById(R.id.tvBienvenida);
+        recyclerView = findViewById(R.id.tblMostrarCanchas);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Mostrar saludo
+        if (nombre == null || nombre.equals("null") || nombre.isEmpty() ||
+                apellido == null || apellido.equals("null") || apellido.isEmpty()) {
+            tvBienvenida.setVisibility(View.GONE);
+        } else {
+            tvBienvenida.setText("¡Bienvenido, " + nombre + " " + apellido + "!");
+        }
+
+        // Inicializar lista y adaptador (PASANDO LOS DATOS DEL DUEÑO AL ADAPTADOR)
+        canchaList = new ArrayList<>();
+        canchaAdapter = new CanchaAdapter(canchaList, idCliente, nombre, apellido);
+        recyclerView.setAdapter(canchaAdapter);
+
+        // Inicializar SearchView
         SearchView svFiltro = findViewById(R.id.svFiltro);
         svFiltro.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -90,43 +118,17 @@ public class Ingreso extends AppCompatActivity {
             }
         });
 
-        // Inicializar vistas
-        tvBienvenida = findViewById(R.id.tvBienvenida);
-        recyclerView = findViewById(R.id.tblMostrarCanchas);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // Inicializar lista y adaptador (inicialmente vacíos)
-        canchaList = new ArrayList<>();
-        canchaAdapter = new CanchaAdapter(canchaList);
-        recyclerView.setAdapter(canchaAdapter);
-
-        // Obtener datos del intent
-        nombre = getIntent().getStringExtra("nombre");
-        apellido = getIntent().getStringExtra("apellido");
-        idCliente = getIntent().getStringExtra("id_cliente");
-
-        if (idCliente == null || idCliente.isEmpty()) {
-            Toast.makeText(this, "ID de cliente no recibido", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Mostrar saludo
-        if (nombre == null || nombre.equals("null") || nombre.isEmpty() ||
-                apellido == null || apellido.equals("null") || apellido.isEmpty()) {
-            tvBienvenida.setVisibility(View.GONE);
-        } else {
-            tvBienvenida.setText("¡Bienvenido, " + nombre + " " + apellido + "!");
-        }
-
-        // Configurar insets para evitar superposición con la barra del sistema
+        // Configurar insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Llamar a la función para obtener canchas y actualizar el adaptador
-        obtenerCanchas(idCliente);
+        // Llamar a la función para obtener canchas
+        if (idCliente != null) {
+            obtenerCanchas(idCliente);
+        }
     }
 
     private void obtenerCanchas(String idDueno) {
@@ -149,7 +151,6 @@ public class Ingreso extends AppCompatActivity {
                                 );
                                 nuevaLista.add(cancha);
                             }
-                            // Actualiza el adaptador con la nueva lista
                             canchaAdapter.actualizarDatos(nuevaLista);
                         } catch (JSONException e) {
                             e.printStackTrace();

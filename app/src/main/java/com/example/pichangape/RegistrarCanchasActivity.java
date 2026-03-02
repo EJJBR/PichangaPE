@@ -32,7 +32,7 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
     String nombre;
     String apellido;
     private static final String TAG = "RegistrarCanchasActivity";
-    private EditText lblNombreCancha, lblArea, lblDireccion, lblHorasDisponibles,
+    private EditText lblNombreCancha, lblDireccion, lblHorasDisponibles,
             lblFechasDisponibles, lblCostoPorHora;
     private Spinner spinnerCategoria, spinnerHoraInicio, spinnerHoraFin;
     private Spinner spinnerDiaInicio, spinnerMesInicio, spinnerDiaFin, spinnerMesFin;
@@ -40,8 +40,14 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
     private String categoriaSeleccionada;
     private RequestQueue requestQueue;
     private String idDueno;
+    
+    // Variables para el modo edición
+    private String idCanchaEdicion = null;
+    private boolean esModoEdicion = false;
 
     private static final String URL_REGISTRAR_CANCHA = ApiConfig.BASE_URL + "agregar.php";
+    // Nota: La URL de actualizar se usará después
+    private static final String URL_ACTUALIZAR_CANCHA = ApiConfig.BASE_URL + "actualizar_cancha.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +56,7 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
 
-        // OBTENER DATOS PRIMERO
+        // Obtener datos del dueño
         nombre = getIntent().getStringExtra("nombre");
         apellido = getIntent().getStringExtra("apellido");
         obtenerIdDueno();
@@ -60,23 +66,45 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
         configurarSpinnersHoras();
         configurarSpinnersFechas();
         configurarBotones();
+
+        // COMPROBAR SI ESTAMOS EN MODO EDICIÓN
+        verificarModoEdicion();
+    }
+
+    private void verificarModoEdicion() {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("id_cancha")) {
+            esModoEdicion = true;
+            idCanchaEdicion = intent.getStringExtra("id_cancha");
+            
+            // Cambiar textos de la interfaz
+            btnRegistrar.setText("Actualizar");
+            
+            // Llenar campos con los datos recibidos
+            lblNombreCancha.setText(intent.getStringExtra("nombre_cancha"));
+            lblDireccion.setText(intent.getStringExtra("direccion"));
+            lblCostoPorHora.setText(intent.getStringExtra("precio"));
+            
+            // Nota: Para los spinners de horas y fechas, se quedarían con valores por defecto
+            // o podrías parsear los strings si fuera necesario.
+            
+            Log.d(TAG, "Modo edición activado para cancha ID: " + idCanchaEdicion);
+        }
     }
 
     private void obtenerIdDueno() {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("id_cliente")) {
             idDueno = intent.getStringExtra("id_cliente");
-            Log.d(TAG, "ID del dueño obtenido: " + idDueno);
         } else {
-            Log.e(TAG, "No se encontró el ID del dueño en el Intent");
-            Toast.makeText(this, "Error: No se pudo obtener la información del usuario", Toast.LENGTH_LONG).show();
-            finish();
+            // Si no hay ID de cliente (caso de venir desde el botón editar), 
+            // el ID del dueño debería ser recuperado de una sesión global o base de datos.
+            // Por ahora, asumiremos que se mantiene la navegación.
         }
     }
 
     private void inicializarVistas() {
         lblNombreCancha = findViewById(R.id.lblNombreCancha);
-        lblArea = findViewById(R.id.lblArea);
         lblDireccion = findViewById(R.id.lblDireccion);
         lblHorasDisponibles = findViewById(R.id.lblhorasdisponibles);
         lblFechasDisponibles = findViewById(R.id.lblfechasdisponibles);
@@ -204,7 +232,11 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
 
         btnRegistrar.setOnClickListener(v -> {
             if (validarCampos()) {
-                registrarCancha();
+                if (esModoEdicion) {
+                    actualizarCancha();
+                } else {
+                    registrarCancha();
+                }
             }
         });
     }
@@ -280,9 +312,47 @@ public class RegistrarCanchasActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    private void actualizarCancha() {
+        Toast.makeText(this, "Actualizando cancha...", Toast.LENGTH_SHORT).show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ACTUALIZAR_CANCHA,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("success")) {
+                            Toast.makeText(RegistrarCanchasActivity.this, "Cancha actualizada exitosamente", Toast.LENGTH_SHORT).show();
+                            // Al terminar, volvemos a la lista
+                            btnRegresar.performClick();
+                        } else {
+                            Toast.makeText(RegistrarCanchasActivity.this, "Error: " + response, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(RegistrarCanchasActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_cancha", idCanchaEdicion); // Enviamos el ID para saber cuál actualizar
+                params.put("nombre", lblNombreCancha.getText().toString().trim());
+                params.put("direccion", lblDireccion.getText().toString().trim());
+                params.put("precio_por_hora", lblCostoPorHora.getText().toString().trim());
+                params.put("tipoCancha", categoriaSeleccionada.toLowerCase());
+                params.put("horasDisponibles", lblHorasDisponibles.getText().toString().trim());
+                params.put("fechas_abiertas", lblFechasDisponibles.getText().toString().trim());
+                return params;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+    }
+
     private void limpiarCampos() {
         lblNombreCancha.setText("");
-        lblArea.setText("");
         lblDireccion.setText("");
         lblCostoPorHora.setText("");
         spinnerCategoria.setSelection(0);

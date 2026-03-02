@@ -50,8 +50,10 @@
             android:name=".DetalleReservaActivity"
             android:screenOrientation="portrait" />
 
-        <!-- Actividad de Registrar -->
-        <activity android:name=".RegistrarCanchasActivity" />
+        <!-- Actividad de Registrar - Cambiado a adjustPan para mejor comportamiento del teclado -->
+        <activity android:name=".RegistrarCanchasActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- Actividad para verificar comprobante -->
         <activity
