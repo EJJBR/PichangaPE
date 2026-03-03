@@ -48,6 +48,9 @@ public class HacerReservaActivity extends AppCompatActivity {
     private double precioHora, totalCalculado = 0;
     private Bitmap bitmapVoucher;
 
+    // Variables para el rango de fechas
+    private int mesInicioPermitido, mesFinPermitido, diaInicioPermitido, diaFinPermitido;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +92,6 @@ public class HacerReservaActivity extends AppCompatActivity {
         tvNombre.setText(getIntent().getStringExtra("nombre_cancha"));
         tvDireccion.setText(getIntent().getStringExtra("direccion"));
         tvPrecio.setText("$" + precioHoraStr + " / hora");
-        
         tvYape.setText("Yape: " + getIntent().getStringExtra("numYape"));
         tvTransfer.setText("Transferencia: " + getIntent().getStringExtra("numTransfer"));
     }
@@ -100,55 +102,72 @@ public class HacerReservaActivity extends AppCompatActivity {
         spinnerHoraInicio = findViewById(R.id.spinnerResHoraInicio);
         spinnerHoraFin = findViewById(R.id.spinnerResHoraFin);
 
+        // --- 1. Lógica de Horas ---
         try {
             String[] partesH = horasDisponibles.split("-");
-            int hInicio = Integer.parseInt(partesH[0].split(":")[0]);
-            int hFin = Integer.parseInt(partesH[1].split(":")[0]);
-
+            int hI = Integer.parseInt(partesH[0].split(":")[0]);
+            int hF = Integer.parseInt(partesH[1].split(":")[0]);
             List<String> horasPermitidas = new ArrayList<>();
-            for (int i = hInicio; i <= hFin; i++) {
-                horasPermitidas.add(String.format("%02d:00", i));
-            }
-
+            for (int i = hI; i <= hF; i++) horasPermitidas.add(String.format("%02d:00", i));
             ArrayAdapter<String> adapterH = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, horasPermitidas);
             spinnerHoraInicio.setAdapter(adapterH);
             spinnerHoraFin.setAdapter(adapterH);
-        } catch (Exception e) {
-            Log.e("HacerReserva", "Error parsing horas");
-        }
+        } catch (Exception e) { Log.e("HacerReserva", "Error horas"); }
 
+        // --- 2. Lógica de Fechas (CORREGIDA) ---
         try {
-            List<String> diasP = new ArrayList<>();
-            List<String> mesesP = new ArrayList<>();
-
             if (fechasAbiertas.contains(",")) {
                 String[] rangos = fechasAbiertas.split(",");
                 String[] fInicio = rangos[0].trim().split("-");
                 String[] fFin = rangos[rangos.length - 1].trim().split("-");
-                for (int i = Integer.parseInt(fInicio[1]); i <= Integer.parseInt(fFin[1]); i++) mesesP.add(String.format("%02d", i));
-                for (int i = Integer.parseInt(fInicio[2]); i <= Integer.parseInt(fFin[2]); i++) diasP.add(String.format("%02d", i));
+
+                mesInicioPermitido = Integer.parseInt(fInicio[1]);
+                diaInicioPermitido = Integer.parseInt(fInicio[2]);
+                mesFinPermitido = Integer.parseInt(fFin[1]);
+                diaFinPermitido = Integer.parseInt(fFin[2]);
+
+                List<String> mesesP = new ArrayList<>();
+                for (int i = mesInicioPermitido; i <= mesFinPermitido; i++) mesesP.add(String.format("%02d", i));
+                spinnerMes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mesesP));
+
+                // Listener para actualizar los días según el mes seleccionado
+                spinnerMes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        actualizarSpinnerDias(Integer.parseInt(mesesP.get(position)));
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
             } else {
                 String[] fUnica = fechasAbiertas.trim().split("-");
-                mesesP.add(fUnica[1]);
-                diasP.add(fUnica[2]);
+                List<String> m = new ArrayList<>(); m.add(fUnica[1]);
+                List<String> d = new ArrayList<>(); d.add(fUnica[2]);
+                spinnerMes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, m));
+                spinnerDia.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, d));
             }
-
-            spinnerMes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mesesP));
-            spinnerDia.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, diasP));
-        } catch (Exception e) {
-            Log.e("HacerReserva", "Error parsing fechas");
-        }
+        } catch (Exception e) { Log.e("HacerReserva", "Error fechas"); }
 
         AdapterView.OnItemSelectedListener listenerTotal = new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                calcularTotal();
-            }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { calcularTotal(); }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         };
         spinnerHoraInicio.setOnItemSelectedListener(listenerTotal);
         spinnerHoraFin.setOnItemSelectedListener(listenerTotal);
+    }
+
+    private void actualizarSpinnerDias(int mesSeleccionado) {
+        List<String> diasP = new ArrayList<>();
+        int inicio = 1;
+        int fin = 31; // Simplificado, idealmente usar Calendar para fin de mes
+
+        if (mesSeleccionado == mesInicioPermitido) inicio = diaInicioPermitido;
+        if (mesSeleccionado == mesFinPermitido) fin = diaFinPermitido;
+
+        for (int i = inicio; i <= fin; i++) diasP.add(String.format("%02d", i));
+        spinnerDia.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, diasP));
     }
 
     private void calcularTotal() {
@@ -177,9 +196,7 @@ public class HacerReservaActivity extends AppCompatActivity {
                             bitmapVoucher = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                             ivPreview.setImageBitmap(bitmapVoucher);
                             ivPreview.setVisibility(View.VISIBLE);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        } catch (IOException e) { e.printStackTrace(); }
                     }
                 }
         );
@@ -214,9 +231,7 @@ public class HacerReservaActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(response);
                         String urlImagen = json.getJSONObject("data").getString("url");
                         registrarReservaEnBD(urlImagen);
-                    } catch (JSONException e) {
-                        Toast.makeText(this, "Error ImgBB", Toast.LENGTH_SHORT).show();
-                    }
+                    } catch (JSONException e) { Toast.makeText(this, "Error ImgBB", Toast.LENGTH_SHORT).show(); }
                 },
                 error -> {
                     pd.dismiss();
@@ -255,9 +270,7 @@ public class HacerReservaActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(this, json.getString("error"), Toast.LENGTH_LONG).show();
                         }
-                    } catch (JSONException e) {
-                        Toast.makeText(this, "Error de respuesta", Toast.LENGTH_SHORT).show();
-                    }
+                    } catch (JSONException e) { Toast.makeText(this, "Error de respuesta", Toast.LENGTH_SHORT).show(); }
                 },
                 error -> {
                     pd.dismiss();
