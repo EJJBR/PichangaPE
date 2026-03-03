@@ -38,8 +38,6 @@ public class ClienteMainActivity extends AppCompatActivity {
     private String idCliente, nombre, apellido;
     private SearchView svFiltro;
 
-    // URL para obtener todas las canchas (reutilizamos la de mostrar canchas pero el PHP debería permitir traer todas)
-    // O crearemos una nueva si es necesario. Por ahora usamos la base.
     private String urlCanchas = ApiConfig.BASE_URL + "CMostrarTodasCanchas.php";
 
     @Override
@@ -47,12 +45,12 @@ public class ClienteMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_main);
 
-        // Recuperar datos del intent
+        // 1. Recuperar datos del intent PRIMERO
         idCliente = getIntent().getStringExtra("id_cliente");
         nombre = getIntent().getStringExtra("nombre");
         apellido = getIntent().getStringExtra("apellido");
 
-        // Inicializar vistas
+        // 2. Inicializar vistas
         tvBienvenida = findViewById(R.id.tvBienvenidaCliente);
         btnCanchas = findViewById(R.id.btnVerCanchas);
         btnMisReservas = findViewById(R.id.btnMisReservas);
@@ -61,9 +59,10 @@ public class ClienteMainActivity extends AppCompatActivity {
 
         tvBienvenida.setText("¡Te damos la bienvenida, " + nombre + " " + apellido + "!");
 
+        // 3. Inicializar adaptador con los 4 argumentos requeridos
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         canchaList = new ArrayList<>();
-        adapter = new CanchaClienteAdapter(canchaList);
+        adapter = new CanchaClienteAdapter(canchaList, idCliente, nombre, apellido);
         recyclerView.setAdapter(adapter);
 
         // Configurar botones de navegación
@@ -108,7 +107,7 @@ public class ClienteMainActivity extends AppCompatActivity {
 
     private void obtenerTodasLasCanchas() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlCanchas,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlCanchas,
                 response -> {
                     try {
                         JSONObject jsonResponse = new JSONObject(response);
@@ -116,12 +115,19 @@ public class ClienteMainActivity extends AppCompatActivity {
                         List<Cancha> nuevaLista = new ArrayList<>();
                         for (int i = 0; i < canchasArray.length(); i++) {
                             JSONObject obj = canchasArray.getJSONObject(i);
-                            nuevaLista.add(new Cancha(
+                            
+                            // LEER LOS NUEVOS CAMPOS DEL PHP
+                            Cancha cancha = new Cancha(
                                     obj.getString("id_cancha"),
                                     obj.getString("nombre"),
                                     obj.getString("direccion"),
-                                    (float) obj.getDouble("precio_por_hora")
-                            ));
+                                    (float) obj.getDouble("precio_por_hora"),
+                                    obj.optString("numYape", "No disponible"),
+                                    obj.optString("numTransfer", "No disponible"),
+                                    obj.optString("horasDisponibles", ""),
+                                    obj.optString("fechas_abiertas", "")
+                            );
+                            nuevaLista.add(cancha);
                         }
                         adapter.actualizarDatos(nuevaLista);
                     } catch (JSONException e) {

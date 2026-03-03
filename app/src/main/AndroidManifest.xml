@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:node="replace"/>
 
     <application
         android:allowBackup="true"
@@ -39,37 +40,18 @@
             </intent-filter>
         </activity>
 
-        <!-- Actividad de bienvenida -->
         <activity android:name=".BienvenidaActivity" />
-
-        <!-- Actividad de reservaciones -->
         <activity android:name=".ReservacionesActivity" />
-
-        <!-- Actividad de detalle de reserva -->
-        <activity
-            android:name=".DetalleReservaActivity"
-            android:screenOrientation="portrait" />
-
-        <!-- Actividad de Registrar - Cambiado a adjustPan para mejor comportamiento del teclado -->
-        <activity android:name=".RegistrarCanchasActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
-
-        <!-- Actividad para verificar comprobante -->
-        <activity
-            android:name=".VerificarComprobanteActivity"
-            android:screenOrientation="portrait" />
-
-        <!-- Actividad Ingreso -->
+        <activity android:name=".DetalleReservaActivity" android:screenOrientation="portrait" />
+        <activity android:name=".RegistrarCanchasActivity" android:exported="false" android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".VerificarComprobanteActivity" android:screenOrientation="portrait" />
         <activity android:name=".view.Ingreso" />
+        <activity android:name=".RegistroClienteActivity" android:windowSoftInputMode="adjustPan" android:exported="false" />
+        <activity android:name=".ClienteMainActivity" android:screenOrientation="portrait" android:exported="false" />
 
-        <!-- Actividad de Registro de Cliente -->
-        <activity android:name=".RegistroClienteActivity"
+        <!-- ACTIVIDAD HACER RESERVA (NUEVA) -->
+        <activity android:name=".HacerReservaActivity"
             android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
-
-        <!-- Actividad Principal del Cliente (Nueva) -->
-        <activity android:name=".ClienteMainActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 

@@ -176,7 +176,7 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
 
     /**
      * Envía el nuevo estado a la API para actualizar la reserva.
-     * Si la actualización es exitosa, se redirige a la pantalla de BienvenidaActivity.
+     * Si la actualización es exitosa, se redirige a la pantalla de BienvenidaActivity (Ingresos).
      * @param nuevoEstado "cancelado" o "alquilada"
      */
     private void actualizarEstadoReserva(final String nuevoEstado) {
@@ -208,7 +208,7 @@ public class VerificarComprobanteActivity extends AppCompatActivity {
                                     Toast.makeText(VerificarComprobanteActivity.this, "No se obtuvo id_cliente", Toast.LENGTH_LONG).show();
                                     return;
                                 }
-                                // Navegar a la pantalla de BienvenidaActivity
+                                // REDIRIGIR A BienvenidaActivity (Pestaña Ingresos)
                                 Intent intent = new Intent(VerificarComprobanteActivity.this, BienvenidaActivity.class);
                                 intent.putExtra("id_cliente", id_cliente);
                                 intent.putExtra("nombre", nombre);

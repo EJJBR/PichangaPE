@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/design_default_color_background">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/tvTituloReserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Realizar Reserva"
+                android:textColor="#101010"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Datos de la cancha -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardInfoCancha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintTop_toBottomOf="@id/tvTituloReserva">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView android:id="@+id/tvReservaNombreCancha" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nombre de la Cancha" android:textStyle="bold" android:textSize="18sp" android:textColor="#000000"/>
+                    <TextView android:id="@+id/tvReservaDireccion" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dirección" android:textColor="#757575"/>
+                    <TextView android:id="@+id/tvReservaPrecioHora" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$0.0 / hora" android:textStyle="bold" android:textColor="#FF5252" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Selección de Fecha -->
+            <TextView android:id="@+id/tvLabelFecha" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fecha de Reserva:" android:textColor="#101010" android:textStyle="bold" android:layout_marginTop="20dp" app:layout_constraintTop_toBottomOf="@id/cardInfoCancha" app:layout_constraintStart_toStartOf="parent"/>
+            <LinearLayout android:id="@+id/lyFechaReserva" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@id/tvLabelFecha">
+                <Spinner android:id="@+id/spinnerResDia" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" />
+                <Spinner android:id="@+id/spinnerResMes" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" />
+            </LinearLayout>
+
+            <!-- Selección de Horario -->
+            <TextView android:id="@+id/tvLabelHoras" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Seleccionar Horario:" android:textColor="#101010" android:textStyle="bold" android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@id/lyFechaReserva" app:layout_constraintStart_toStartOf="parent"/>
+            <LinearLayout android:id="@+id/lyHorasReserva" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@id/tvLabelHoras">
+                <Spinner android:id="@+id/spinnerResHoraInicio" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" a " android:textColor="#101010" android:layout_gravity="center_vertical"/>
+                <Spinner android:id="@+id/spinnerResHoraFin" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" />
+            </LinearLayout>
+
+            <!-- Datos de Pago -->
+            <TextView android:id="@+id/tvLabelPago" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Datos de Pago del Dueño:" android:textColor="#101010" android:textStyle="bold" android:layout_marginTop="20dp" app:layout_constraintTop_toBottomOf="@id/lyHorasReserva" app:layout_constraintStart_toStartOf="parent"/>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardPagoInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="#E3F2FD"
+                app:layout_constraintTop_toBottomOf="@id/tvLabelPago">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="12dp">
+                    <TextView android:id="@+id/tvYapeDuenio" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Yape: Esperando datos..." android:textColor="#1565C0" android:textStyle="bold"/>
+                    <TextView android:id="@+id/tvTransferDuenio" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Transferencia: Esperando datos..." android:textColor="#1565C0" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Carga de Voucher -->
+            <Button
+                android:id="@+id/btnSeleccionarVoucher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Subir Foto de Transferencia"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF"
+                app:layout_constraintTop_toBottomOf="@id/cardPagoInfo" />
+
+            <ImageView
+                android:id="@+id/ivVoucherPreview"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="centerCrop"
+                android:background="#EEEEEE"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/btnSeleccionarVoucher" />
+
+            <!-- Resumen y Confirmación -->
+            <TextView
+                android:id="@+id/tvTotalReserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Total a pagar: $0.00"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/ivVoucherPreview"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/btnConfirmarReserva"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:text="Confirmar Reserva"
+                android:backgroundTint="#FF5252"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalReserva" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

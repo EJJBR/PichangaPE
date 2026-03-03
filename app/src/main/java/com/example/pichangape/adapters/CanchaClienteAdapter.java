@@ -1,5 +1,7 @@
 package com.example.pichangape.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pichangape.HacerReservaActivity;
 import com.example.pichangape.R;
 import com.example.pichangape.models.Cancha;
 
@@ -20,10 +23,14 @@ public class CanchaClienteAdapter extends RecyclerView.Adapter<CanchaClienteAdap
 
     private List<Cancha> canchaList;
     private List<Cancha> canchaListFull;
+    private String idCliente, nombre, apellido; // Datos del cliente actual
 
-    public CanchaClienteAdapter(List<Cancha> canchaList) {
+    public CanchaClienteAdapter(List<Cancha> canchaList, String idCliente, String nombre, String apellido) {
         this.canchaList = new ArrayList<>(canchaList);
         this.canchaListFull = new ArrayList<>(canchaList);
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.apellido = apellido;
     }
 
     @NonNull
@@ -42,8 +49,27 @@ public class CanchaClienteAdapter extends RecyclerView.Adapter<CanchaClienteAdap
         holder.tvPrecio.setText("$" + cancha.getPrecioHora() + " / hora");
 
         holder.btnReservar.setOnClickListener(v -> {
-            // Aquí irá la lógica para abrir la pantalla de reserva
-            // pasando el id_cancha
+            Context context = v.getContext();
+            Intent intent = new Intent(context, HacerReservaActivity.class);
+            
+            // Pasar datos de la cancha
+            intent.putExtra("id_cancha", cancha.getIdCancha());
+            intent.putExtra("nombre_cancha", cancha.getNombre());
+            intent.putExtra("direccion", cancha.getUbicacion());
+            intent.putExtra("precio", cancha.getPrecioHora());
+            
+            // PASAR LOS NUEVOS DATOS DE PAGO Y DISPONIBILIDAD
+            intent.putExtra("numYape", cancha.getNumYape());
+            intent.putExtra("numTransfer", cancha.getNumTransfer());
+            intent.putExtra("horasDisponibles", cancha.getHorasDisponibles());
+            intent.putExtra("fechas_abiertas", cancha.getFechasAbiertas());
+            
+            // Pasar datos del cliente actual para la reserva
+            intent.putExtra("id_cliente_reservador", idCliente);
+            intent.putExtra("nombre_cliente", nombre);
+            intent.putExtra("apellido_cliente", apellido);
+            
+            context.startActivity(intent);
         });
     }
 
