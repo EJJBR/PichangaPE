@@ -1,5 +1,6 @@
 package com.example.pichangape;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +19,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pichangape.adapters.CanchaClienteAdapter;
+import com.example.pichangape.adapters.ReservasAdapter;
 import com.example.pichangape.models.Cancha;
+import com.example.pichangape.models.Reserva;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
@@ -26,31 +29,34 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClienteMainActivity extends AppCompatActivity {
 
     private TextView tvBienvenida;
     private MaterialButton btnCanchas, btnMisReservas;
     private RecyclerView recyclerView;
-    private CanchaClienteAdapter adapter;
+    private CanchaClienteAdapter canchaAdapter;
+    private ReservasAdapter reservasAdapter;
     private List<Cancha> canchaList;
+    private List<Reserva> reservasList;
     private String idCliente, nombre, apellido;
     private SearchView svFiltro;
 
     private String urlCanchas = ApiConfig.BASE_URL + "CMostrarTodasCanchas.php";
+    private String urlReservas = ApiConfig.BASE_URL + "CListarReservasCliente.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_main);
 
-        // 1. Recuperar datos del intent PRIMERO
         idCliente = getIntent().getStringExtra("id_cliente");
         nombre = getIntent().getStringExtra("nombre");
         apellido = getIntent().getStringExtra("apellido");
 
-        // 2. Inicializar vistas
         tvBienvenida = findViewById(R.id.tvBienvenidaCliente);
         btnCanchas = findViewById(R.id.btnVerCanchas);
         btnMisReservas = findViewById(R.id.btnMisReservas);
@@ -59,50 +65,62 @@ public class ClienteMainActivity extends AppCompatActivity {
 
         tvBienvenida.setText("¡Te damos la bienvenida, " + nombre + " " + apellido + "!");
 
-        // 3. Inicializar adaptador con los 4 argumentos requeridos
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        
+        // Inicializar listas
         canchaList = new ArrayList<>();
-        adapter = new CanchaClienteAdapter(canchaList, idCliente, nombre, apellido);
-        recyclerView.setAdapter(adapter);
+        reservasList = new ArrayList<>();
+        
+        // Inicializar adaptadores
+        canchaAdapter = new CanchaClienteAdapter(canchaList, idCliente, nombre, apellido);
+        reservasAdapter = new ReservasAdapter(this, reservasList);
 
-        // Configurar botones de navegación
+        // Por defecto mostramos canchas
+        mostrarCanchas();
+
         btnCanchas.setOnClickListener(v -> mostrarCanchas());
         btnMisReservas.setOnClickListener(v -> mostrarMisReservas());
 
-        // Configurar buscador
         svFiltro.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapter.getFilter().filter(query);
+                if(recyclerView.getAdapter() instanceof CanchaClienteAdapter) {
+                    canchaAdapter.getFilter().filter(query);
+                }
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                if(recyclerView.getAdapter() instanceof CanchaClienteAdapter) {
+                    canchaAdapter.getFilter().filter(newText);
+                }
                 return false;
             }
         });
-
-        // Cargar canchas por defecto
-        obtenerTodasLasCanchas();
     }
 
     private void mostrarCanchas() {
+        // UI
         btnCanchas.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#FF5252")));
         btnCanchas.setTextColor(Color.WHITE);
         btnMisReservas.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#f0f0f0")));
         btnMisReservas.setTextColor(Color.parseColor("#424242"));
-        
+        svFiltro.setVisibility(View.VISIBLE);
+
+        recyclerView.setAdapter(canchaAdapter);
         obtenerTodasLasCanchas();
     }
 
     private void mostrarMisReservas() {
+        // UI
         btnMisReservas.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#FF5252")));
         btnMisReservas.setTextColor(Color.WHITE);
         btnCanchas.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#f0f0f0")));
         btnCanchas.setTextColor(Color.parseColor("#424242"));
-        
-        Toast.makeText(this, "Próximamente: Lista de tus reservas", Toast.LENGTH_SHORT).show();
+        svFiltro.setVisibility(View.GONE);
+
+        recyclerView.setAdapter(reservasAdapter);
+        obtenerMisReservas();
     }
 
     private void obtenerTodasLasCanchas() {
@@ -115,28 +133,65 @@ public class ClienteMainActivity extends AppCompatActivity {
                         List<Cancha> nuevaLista = new ArrayList<>();
                         for (int i = 0; i < canchasArray.length(); i++) {
                             JSONObject obj = canchasArray.getJSONObject(i);
-                            
-                            // LEER LOS NUEVOS CAMPOS DEL PHP
-                            Cancha cancha = new Cancha(
+                            nuevaLista.add(new Cancha(
                                     obj.getString("id_cancha"),
                                     obj.getString("nombre"),
                                     obj.getString("direccion"),
                                     (float) obj.getDouble("precio_por_hora"),
-                                    obj.optString("numYape", "No disponible"),
-                                    obj.optString("numTransfer", "No disponible"),
+                                    obj.optString("numYape", ""),
+                                    obj.optString("numTransfer", ""),
                                     obj.optString("horasDisponibles", ""),
                                     obj.optString("fechas_abiertas", "")
-                            );
-                            nuevaLista.add(cancha);
+                            ));
                         }
-                        adapter.actualizarDatos(nuevaLista);
+                        canchaAdapter.actualizarDatos(nuevaLista);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(ClienteMainActivity.this, "Error al procesar canchas", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(ClienteMainActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show()
+                error -> Toast.makeText(this, "Error de red", Toast.LENGTH_SHORT).show()
         );
         queue.add(stringRequest);
+    }
+
+    private void obtenerMisReservas() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Cargando tus reservas...");
+        progressDialog.show();
+
+        StringRequest request = new StringRequest(Request.Method.POST, urlReservas,
+                response -> {
+                    progressDialog.dismiss();
+                    List<Reserva> nuevasReservas = new ArrayList<>();
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject obj = jsonArray.getJSONObject(i);
+                            nuevasReservas.add(new Reserva(
+                                    obj.getInt("id_reserva"),
+                                    obj.getString("fecha_inicio"),
+                                    obj.getString("hora_inicio"),
+                                    obj.getString("hora_fin"),
+                                    obj.getString("estado_reserva")
+                            ));
+                        }
+                        reservasAdapter.updateList(nuevasReservas);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Sin reservas aún", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Error de red", Toast.LENGTH_SHORT).show();
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_cliente", idCliente);
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(request);
     }
 }
